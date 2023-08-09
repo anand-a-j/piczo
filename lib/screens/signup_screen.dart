@@ -35,17 +35,34 @@ class _SignupScreenState extends State<SignupScreen> {
                   radius: 16,
                   child: CircleAvatar(
                     radius: 14,
-                    child: Icon(Icons.add_a_photo,size: 14,),
+                    child: Icon(
+                      Icons.add_a_photo,
+                      size: 14,
+                    ),
                   ),
                 ),
               )
             ],
           ),
-          CustomTextField(textController: _usernameController, hintText: "Enter your username", textInputType: TextInputType.text),
-          CustomTextField(textController: _emailController, hintText: "Enter your email", textInputType: TextInputType.emailAddress),
-          CustomTextField(textController: _passwordController, hintText: "Enter your password", textInputType: TextInputType.text,isPass: true,),
-          CustomTextField(textController: _bioController, hintText: "Enter your bio", textInputType: TextInputType.text),
-          CustomElevatedButton(title: "Sign Up", isPressed: (){})
+          CustomTextField(
+              textController: _usernameController,
+              hintText: "Enter your username",
+              textInputType: TextInputType.text),
+          CustomTextField(
+              textController: _emailController,
+              hintText: "Enter your email",
+              textInputType: TextInputType.emailAddress),
+          CustomTextField(
+            textController: _passwordController,
+            hintText: "Enter your password",
+            textInputType: TextInputType.text,
+            isPass: true,
+          ),
+          CustomTextField(
+              textController: _bioController,
+              hintText: "Enter your bio",
+              textInputType: TextInputType.text),
+          CustomElevatedButton(title: "Sign Up", isPressed: () {})
         ],
       ),
     );

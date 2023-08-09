@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "796690210831",
+    "project_id": "piczo-d9f39",
+    "storage_bucket": "piczo-d9f39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796690210831:android:61356f7a55306866fdc37a",
+        "android_client_info": {
+          "package_name": "com.example.piczo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796690210831-fbb3vjtgcgtc5sro0fqrm61mdmb5rnkt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXqYUhb4FxeiLXgTreabiVP1RkJjeAuX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796690210831-fbb3vjtgcgtc5sro0fqrm61mdmb5rnkt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
