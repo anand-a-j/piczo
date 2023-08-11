@@ -13,7 +13,7 @@ class AuthMethods {
     required String password,
     required String username,
     required String bio,
-   required Uint8List file,
+  // required Uint8List file,
   }) async {
     String res = "Some error occured";
 
@@ -22,8 +22,8 @@ class AuthMethods {
           password.isNotEmpty ||
           username.isNotEmpty ||
           bio.isNotEmpty 
-          ||
-          file != null
+          // ||
+          //file != null
           ) {
         // regsister user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(

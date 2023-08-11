@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:piczo/resources/auth_methods.dart';
@@ -18,9 +20,13 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+  Uint8List? _image;
 
   void selectImage() async {
-    await pickImage(ImageSource.gallery);
+    Uint8List image = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
   }
 
   @override
@@ -31,7 +37,12 @@ class _SignupScreenState extends State<SignupScreen> {
         children: [
           Stack(
             children: [
+              _image != null ? 
               CircleAvatar(
+                radius: 46,
+                backgroundImage: MemoryImage(_image!),
+              )
+             : CircleAvatar(
                 radius: 46,
                 backgroundColor: primaryColor,
               ),
