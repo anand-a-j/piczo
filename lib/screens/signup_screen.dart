@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/utils/colors.dart';
+import 'package:piczo/utils/utils.dart';
 import 'package:piczo/widgets/custom_elevated_button.dart';
 import 'package:piczo/widgets/custom_text_field.dart';
 
@@ -15,6 +18,11 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+
+  void selectImage() async {
+    await pickImage(ImageSource.gallery);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +43,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   radius: 16,
                   child: CircleAvatar(
                     radius: 14,
-                    child: Icon(
-                      Icons.add_a_photo,
-                      size: 14,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      icon: const Icon(
+                        Icons.add_a_photo,
+                        size: 14,
+                      ),
                     ),
                   ),
                 ),
@@ -62,7 +73,17 @@ class _SignupScreenState extends State<SignupScreen> {
               textController: _bioController,
               hintText: "Enter your bio",
               textInputType: TextInputType.text),
-          CustomElevatedButton(title: "Sign Up", isPressed: () {})
+          CustomElevatedButton(
+              title: "Sign Up",
+              isPressed: () async {
+                String res = await AuthMethods().signUpUser(
+                  email: _emailController.text,
+                  password: _passwordController.text,
+                  username: _usernameController.text,
+                  bio: _bioController.text,
+                );
+                print(res);
+              })
         ],
       ),
     );

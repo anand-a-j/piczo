@@ -9,7 +9,7 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 40,
       width: double.infinity,
       margin: EdgeInsets.all(10),
       color: primaryColor,
