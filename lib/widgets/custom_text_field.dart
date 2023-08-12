@@ -12,7 +12,8 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final inputDecoration = OutlineInputBorder(
       borderSide: BorderSide(
-        color: kGrey
+        color: kGrey,
+        
       )
     );
     return Padding(

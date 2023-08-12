@@ -4,7 +4,12 @@ import 'package:piczo/utils/colors.dart';
 class CustomElevatedButton extends StatelessWidget {
   final String title;
   final Function()? isPressed;
-  const CustomElevatedButton({super.key, required this.title,required this.isPressed});
+  final bool isLoading;
+  const CustomElevatedButton(
+      {super.key,
+      required this.title,
+      required this.isPressed,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,18 @@ class CustomElevatedButton extends StatelessWidget {
       width: double.infinity,
       margin: EdgeInsets.all(10),
       color: primaryColor,
-      child: ElevatedButton(onPressed: isPressed, child: Text(title,style: TextStyle(),)),
+      child: ElevatedButton(
+          onPressed: isPressed,
+          child: isLoading == true
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: kWhite,
+                  ),
+                )
+              : Text(
+                  title,
+                  style: TextStyle(),
+                )),
     );
   }
 }

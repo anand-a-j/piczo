@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
         CustomTextField(textController: _emailController, hintText: "Enter your email here", textInputType: TextInputType.emailAddress,),
         CustomTextField(textController: _passwordController, hintText: "Enter your password here", textInputType: TextInputType.text,isPass: true,),
-        CustomElevatedButton(title: "Login", isPressed: (){}) 
+        CustomElevatedButton(title: "Login", isPressed: (){},isLoading: false,) 
         ],
       ),
     );

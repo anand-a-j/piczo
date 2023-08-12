@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:piczo/resources/auth_methods.dart';
@@ -21,12 +20,37 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   Uint8List? _image;
+  bool isLoading = false;
 
   void selectImage() async {
     Uint8List image = await pickImage(ImageSource.gallery);
     setState(() {
       _image = image;
     });
+  }
+
+  void signUpUser() async {
+    if(_usernameController.text.isNotEmpty&&_emailController.text.isNotEmpty&&_passwordController.text.isNotEmpty){
+      setState(() {
+        isLoading = true;
+      });
+      String res = await AuthMethods().signUpUser(
+          email: _emailController.text,
+          password: _passwordController.text,
+          username: _usernameController.text,
+          bio: _bioController.text,
+          file: _image!);
+      print(res);
+      setState(() {
+        isLoading = false;
+      });
+      if (res != "success" && context.mounted) {
+        showSnackBar(res, context);
+      }
+    }else{
+      showSnackBar("Enter the data", context);
+    }
+   
   }
 
   @override
@@ -37,15 +61,15 @@ class _SignupScreenState extends State<SignupScreen> {
         children: [
           Stack(
             children: [
-              _image != null ? 
-              CircleAvatar(
-                radius: 46,
-                backgroundImage: MemoryImage(_image!),
-              )
-             : CircleAvatar(
-                radius: 46,
-                backgroundColor: primaryColor,
-              ),
+              _image != null
+                  ? CircleAvatar(
+                      radius: 46,
+                      backgroundImage: MemoryImage(_image!),
+                    )
+                  : CircleAvatar(
+                      radius: 46,
+                      backgroundColor: primaryColor,
+                    ),
               Positioned(
                 bottom: 0,
                 right: 5,
@@ -84,17 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
               textController: _bioController,
               hintText: "Enter your bio",
               textInputType: TextInputType.text),
-          CustomElevatedButton(
-              title: "Sign Up",
-              isPressed: () async {
-                String res = await AuthMethods().signUpUser(
-                  email: _emailController.text,
-                  password: _passwordController.text,
-                  username: _usernameController.text,
-                  bio: _bioController.text,
-                );
-                print(res);
-              })
+          CustomElevatedButton(title: "Sign Up", isPressed: signUpUser,isLoading: isLoading,)
         ],
       ),
     );
