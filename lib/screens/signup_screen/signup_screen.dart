@@ -1,9 +1,11 @@
 import 'dart:typed_data';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:piczo/main.dart';
 import 'package:piczo/resources/auth_methods.dart';
-import 'package:piczo/screens/login_screen.dart';
+import 'package:piczo/screens/home_screen/home_screen.dart';
+import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:piczo/widgets/custom_elevated_button.dart';
@@ -49,13 +51,13 @@ class _SignupScreenState extends State<SignupScreen> {
         isLoading = false;
       });
       if (res != "success" && context.mounted) {
-        showSnackBar(res, context);
+        showSnackBar(res, context,AnimatedSnackBarType.success);
       } else {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePagee()));
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
       }
     } else {
-      showSnackBar("Enter the data", context);
+      showSnackBar("Enter the data", context,AnimatedSnackBarType.error);
     }
   }
 
@@ -136,7 +138,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     "Login here",
                     style:
                         TextStyle(color: kWhite, fontWeight: FontWeight.bold),
-                  ))
+                  ),),
             ],
           )
         ],

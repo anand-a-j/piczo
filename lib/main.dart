@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/screens/login_screen.dart';
+import 'package:piczo/screens/home_screen/home_screen.dart';
+import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 
 void main() async {
@@ -18,13 +19,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Piczo',
       theme: ThemeData(scaffoldBackgroundColor: kBlack),
-      // persisting auth state
+      /// persisting auth state -------------------------------------------------
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                return HomePagee();
+                return HomeScreen();
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text(
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+/// Sample Home page------------------------------------------------------------
+
 
 class HomePagee extends StatelessWidget {
   const HomePagee({super.key});
