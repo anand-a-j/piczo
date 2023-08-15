@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:piczo/main.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/screens/home_screen/home_screen.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
@@ -138,7 +137,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     "Login here",
                     style:
                         TextStyle(color: kWhite, fontWeight: FontWeight.bold),
-                  ),),
+                  ),
+                  ),
             ],
           )
         ],
