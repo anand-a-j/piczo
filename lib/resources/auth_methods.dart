@@ -47,7 +47,8 @@ class AuthMethods {
             bio: bio,
             photoUrl: photoUrl,
             followers: [],
-            following: []);
+            following: []
+            );
         // add user to database
         await _firestore
             .collection("users")

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -15,6 +16,12 @@ class StorageMethods {
     // put that file into that ref location
     Reference ref =
         _storage.ref().child(childName).child(_auth.currentUser!.uid);
+
+    if (isPost) {
+      String id = const Uuid().v1();
+      // name of the post will be the id
+      ref.child(id);
+    }
 
     // after putting the file a upload task will get
     UploadTask uploadTask = ref.putData(file);
