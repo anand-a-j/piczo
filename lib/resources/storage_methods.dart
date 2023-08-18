@@ -20,7 +20,7 @@ class StorageMethods {
     if (isPost) {
       String id = const Uuid().v1();
       // name of the post will be the id
-      ref.child(id);
+      ref = ref.child(id);
     }
 
     // after putting the file a upload task will get
