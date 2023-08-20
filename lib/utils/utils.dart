@@ -17,8 +17,7 @@ showSnackBar(String content, BuildContext context, AnimatedSnackBarType type) {
   AnimatedSnackBar.material(content,
           type: type,
           borderRadius: BorderRadius.circular(10),
-          mobileSnackBarPosition: MobileSnackBarPosition.bottom
-          )
+          mobileSnackBarPosition: MobileSnackBarPosition.bottom)
       .show(context);
 
   //----------------------------------------------------------------------------
@@ -33,3 +32,21 @@ showSnackBar(String content, BuildContext context, AnimatedSnackBarType type) {
   // ),
   // );
 }
+
+
+// showAlertDialog(BuildContext context) {
+//   Widget okButton = TextButton(onPressed: () {}, child: const Text("Ok"));
+//   Widget cancelButton = TextButton(
+//       onPressed: () {
+//         Navigator.pop(context);
+//       },
+//       child: const Text("Cancel"));
+
+//   AlertDialog alert = AlertDialog(
+//     title:const Text("Are you Sure!"),
+//     content:const Text("Do you wanna delete this post?"),
+//     actions: [cancelButton, okButton],
+//   );
+
+//   showDialog(context: context, builder: (context) => alert);
+// }

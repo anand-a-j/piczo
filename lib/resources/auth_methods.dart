@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/models/user.dart' as model;
+import 'package:piczo/models/user_model.dart' as model;
 import 'package:piczo/resources/storage_methods.dart';
 
 class AuthMethods {

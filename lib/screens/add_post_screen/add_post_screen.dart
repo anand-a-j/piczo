@@ -2,11 +2,9 @@ import 'dart:typed_data';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:piczo/models/user.dart';
+import 'package:piczo/models/user_model.dart';
 import 'package:piczo/providers/user_provider/user_provider.dart';
 import 'package:piczo/resources/firestore_method.dart';
-import 'package:piczo/screens/home_screen/home_screen.dart';
-import 'package:piczo/screens/profile_screen/profile_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +115,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 appBar: AppBar(
                   backgroundColor: kBlack,
                   leading: IconButton(
-                      onPressed: clearImage, icon: const Icon(Icons.arrow_back)),
+                      onPressed: clearImage,
+                      icon: const Icon(Icons.arrow_back)),
                   title: const Text("Add post"),
                   actions: [
                     TextButton(
@@ -154,42 +153,43 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           ),
                         ),
                         Expanded(
-                            child: Container(
-                          width: double.infinity,
-                          height: 400,
-                          margin:
-                              EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                          padding: EdgeInsets.all(10),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 240,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: MemoryImage(_file!),
+                          child: Container(
+                            width: double.infinity,
+                            height: 400,
+                            margin:
+                                EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                            padding: EdgeInsets.all(10),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 240,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: MemoryImage(_file!),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 190,
-                                  child: TextField(
-                                    controller: _descriptionController,
-                                    maxLines: 8,
-                                    decoration: InputDecoration(
-                                      hintText: "Enter the caption....",
-                                      hintStyle: TextStyle(color: kGrey),
-                                      border: InputBorder.none,
+                                  SizedBox(
+                                    height: 190,
+                                    child: TextField(
+                                      controller: _descriptionController,
+                                      maxLines: 8,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter the caption....",
+                                        hintStyle: TextStyle(color: kGrey),
+                                        border: InputBorder.none,
+                                      ),
+                                      style: TextStyle(color: kWhite),
                                     ),
-                                    style: TextStyle(color: kWhite),
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ))
+                        ),
                       ],
                     ),
                   ],

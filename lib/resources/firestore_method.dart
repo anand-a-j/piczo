@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:piczo/models/comment_model.dart';
-import 'package:piczo/models/post.dart';
+import 'package:piczo/models/post_model.dart';
 import 'package:piczo/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,7 +11,7 @@ class FirestoreMethods {
   /// upload post
   Future<String> uploadPost(String description, Uint8List file, String uid,
       String username, String profileImage) async {
-    String res = "something went wrong";
+    String res = "something went wrong!";
     try {
       String photoUrl =
           await StorageMethods().uploadImageToStorage("posts", file, true);
@@ -66,9 +66,8 @@ class FirestoreMethods {
             postId: postId,
             uid: uid,
             username: username,
-            profilePic: profilePic
-            );
-       await _firestore
+            profilePic: profilePic);
+        await _firestore
             .collection('posts')
             .doc(postId)
             .collection('comments')
@@ -83,5 +82,15 @@ class FirestoreMethods {
       res = e.toString();
     }
     return res;
+  }
+
+  /// Deleting post if user is the owner----------------------------------------
+  Future<void> deletePost(String postId) async {
+    try {
+     // String res = "Something went wrong";
+      await _firestore.collection('posts').doc(postId).delete();
+    } catch (e) {
+      print("Error while deleting ${e.toString()}");
+    }
   }
 }

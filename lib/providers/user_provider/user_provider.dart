@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:piczo/models/user.dart';
+import 'package:piczo/models/user_model.dart';
 import 'package:piczo/resources/auth_methods.dart';
 
 class UserProvider extends ChangeNotifier {

@@ -1,7 +1,7 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/models/user.dart';
+import 'package:piczo/models/user_model.dart';
 import 'package:piczo/providers/user_provider/user_provider.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/comment_screen/widgets/comment_card.dart';

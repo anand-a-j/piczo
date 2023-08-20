@@ -1,14 +1,17 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/comment_screen/comment_screen.dart';
 import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:piczo/utils/utils.dart';
 
 class PostCard extends StatelessWidget {
   final snap;
   PostCard({super.key, required this.snap});
-  int commentLength=0;
+  int commentLength = 0;
   void getComments() async {
     try {
       QuerySnapshot snaps = await FirebaseFirestore.instance
@@ -44,6 +47,12 @@ class PostCard extends StatelessWidget {
               snap['username'],
               style: TextStyle(fontWeight: FontWeight.bold, color: kWhite),
             ),
+            trailing: IconButton(
+                onPressed: () => moreFunctions(context, snap),
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: kGrey,
+                )),
           ),
           Container(
             margin: EdgeInsets.all(5),
@@ -137,5 +146,51 @@ class PostCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void moreFunctions(context, snap) {
+    showBottomSheet(
+        context: context,
+        builder: (context) {
+          return Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text("Delete Post"),
+                onTap: () {
+                  Widget okButton = TextButton(
+                      onPressed: () async {
+                        await FirestoreMethods().deletePost(snap['postId']);
+                        Navigator.pop(context);
+                        showSnackBar("Post Deleted Successfully", context,
+                            AnimatedSnackBarType.info);
+                      },
+                      child: const Text("Ok"));
+                  Widget cancelButton = TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Cancel"));
+
+                  AlertDialog alert = AlertDialog(
+                    title: const Text("Are you Sure!"),
+                    content: const Text("Do you wanna delete this post?"),
+                    actions: [cancelButton, okButton],
+                  );
+
+                  showDialog(context: context, builder: (context) => alert);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.cancel),
+                title: const Text("Cancel"),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 }
