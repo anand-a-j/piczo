@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:piczo/resources/firestore_method.dart';
+import 'package:piczo/screens/comment_screen/comment_screen.dart';
 import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:intl/intl.dart';
@@ -48,7 +48,9 @@ class PostCard extends StatelessWidget {
               height: 30,
               child: Row(
                 children: [
-                  LikeButton(snap: snap,),
+                  LikeButton(
+                    snap: snap,
+                  ),
                   // Icon(
                   //   Icons.favorite_border_outlined,
                   //   color: Colors.white,
@@ -63,8 +65,14 @@ class PostCard extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  Icon(
-                    Icons.comment_outlined,
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CommentScreen()));
+                    },
+                    icon: Icon(Icons.comment_outlined),
                     color: Colors.white,
                   ),
                   SizedBox(
@@ -93,15 +101,20 @@ class PostCard extends StatelessWidget {
             ),
           ),
           Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-              width: double.infinity,
-              child: RichText(
-                  text: TextSpan(style: TextStyle(color: kWhite), children: [
-                TextSpan(
-                    text: "${snap['username']}  ",
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: snap['description'])
-              ]))),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+            width: double.infinity,
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(color: kWhite),
+                children: [
+                  TextSpan(
+                      text: "${snap['username']}  ",
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: snap['description'])
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
