@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:piczo/resources/firestore_method.dart';
+import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
 import 'package:piczo/utils/colors.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
+  final snap;
+  const PostCard({super.key, required this.snap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(12),
-      padding: EdgeInsets.all(8),
-      height: 450,
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -18,9 +21,11 @@ class PostCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            leading: CircleAvatar(),
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(snap['profileImage']),
+            ),
             title: Text(
-              "User name",
+              snap['username'],
               style: TextStyle(fontWeight: FontWeight.bold, color: kWhite),
             ),
           ),
@@ -31,27 +36,28 @@ class PostCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://images.unsplash.com/photo-1682227456282-37d424bee56a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDM3fENEd3V3WEpBYkV3fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60")),
+                fit: BoxFit.cover,
+                image: NetworkImage(snap['postUrl']),
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: const SizedBox(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+            child: SizedBox(
               width: double.infinity,
               height: 30,
               child: Row(
                 children: [
-                  Icon(
-                    Icons.favorite_border_outlined,
-                    color: Colors.white,
-                  ),
+                  LikeButton(snap: snap,),
+                  // Icon(
+                  //   Icons.favorite_border_outlined,
+                  //   color: Colors.white,
+                  // ),
                   SizedBox(
                     width: 5,
                   ),
                   Text(
-                    "528",
+                    snap['likes'].length.toString(),
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(
@@ -77,35 +83,25 @@ class PostCard extends StatelessWidget {
                   ),
                   Spacer(),
                   Text(
-                    "5 minutes ago",
+                    DateFormat().add_yMMMd().format(
+                          snap['datePublished'].toDate(),
+                        ),
                     style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: SizedBox(
+          Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
               width: double.infinity,
-              height: 20,
-              child: Row(
-                children: [
-                  Text(
-                    "Username  ",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, color: kWhite),
-                  ),
-                  Text(
-                    "hey what's app yoooooooooooo... ",
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: kWhite),
-                  ),
-                ],
-              ),
-            ),
-          ),
+              child: RichText(
+                  text: TextSpan(style: TextStyle(color: kWhite), children: [
+                TextSpan(
+                    text: "${snap['username']}  ",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: snap['description'])
+              ]))),
         ],
       ),
     );

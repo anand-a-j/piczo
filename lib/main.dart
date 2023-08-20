@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
         title: 'Piczo',
         theme: ThemeData(
           scaffoldBackgroundColor: kBlack,
+          appBarTheme: AppBarTheme(
+            backgroundColor: kBlack
+          )
 
           ),
         /// persisting auth state -------------------------------------------------
