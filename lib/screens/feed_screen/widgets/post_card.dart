@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/screens/comment_screen/comment_screen.dart';
 import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
@@ -6,10 +7,25 @@ import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
   final snap;
-  const PostCard({super.key, required this.snap});
+  PostCard({super.key, required this.snap});
+  int commentLength=0;
+  void getComments() async {
+    try {
+      QuerySnapshot snaps = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(snap['postId'])
+          .collection('comments')
+          .get();
+      print("getting comments");
+      commentLength = snaps.docs.length;
+    } catch (e) {
+      print("Something went wrong fetch comment= ${e.toString()}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    getComments();
     return Container(
       margin: EdgeInsets.all(8),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -67,10 +83,13 @@ class PostCard extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
+                      print(snap);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CommentScreen()));
+                              builder: (context) => CommentScreen(
+                                    snap: snap,
+                                  )));
                     },
                     icon: Icon(Icons.comment_outlined),
                     color: Colors.white,
@@ -79,7 +98,7 @@ class PostCard extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    "21",
+                    commentLength.toString(),
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(
