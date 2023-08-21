@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// upload post
+  /// upload post-----------------------------------------------------------------
   Future<String> uploadPost(String description, Uint8List file, String uid,
       String username, String profileImage) async {
     String res = "something went wrong!";
@@ -27,7 +27,7 @@ class FirestoreMethods {
           profileImage: profileImage,
           likes: []);
 
-      //Upload post to firestore
+      /// Upload post to firestore----------------------------------------------------
       _firestore.collection('posts').doc(postId).set(post.toJson());
       res = "post uploaded successfully";
     } catch (e) {
@@ -36,6 +36,7 @@ class FirestoreMethods {
     return res;
   }
 
+  /// like posts------------------------------------------------------------------
   Future<void> likePost(String postId, String uid, List likes) async {
     try {
       // if already liked the post
@@ -53,6 +54,7 @@ class FirestoreMethods {
     }
   }
 
+  /// post comments---------------------------------------------------------------
   Future<String> postComment(String commentText, String postId, String uid,
       String username, String profilePic) async {
     String res = "something went wrong";
@@ -87,10 +89,40 @@ class FirestoreMethods {
   /// Deleting post if user is the owner----------------------------------------
   Future<void> deletePost(String postId) async {
     try {
-     // String res = "Something went wrong";
+      // String res = "Something went wrong";
       await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
       print("Error while deleting ${e.toString()}");
     }
   }
+
+  /// following users-----------------------------------------------------------
+  Future<void> followUser(String uid, String followId) async {
+    try {
+      DocumentSnapshot snap =
+          await _firestore.collection('user').doc(uid).get();
+      List following = (snap.data! as dynamic)['following'];
+      if (following.contains(followId)) {
+        await _firestore.collection('user').doc(followId).update({
+          'followers': FieldValue.arrayRemove([uid])
+        });
+
+        await _firestore.collection('user').doc(followId).update({
+          'following ': FieldValue.arrayRemove([followId])
+        });
+      } else {
+        await _firestore.collection('user').doc(followId).update({
+          'followers': FieldValue.arrayUnion([uid])
+        });
+
+        await _firestore.collection('user').doc(followId).update({
+          'following ': FieldValue.arrayUnion([followId])
+        });
+      }
+    } catch (e) {
+      print("follow user error ${e.toString()}");
+    }
+  }
+
+  
 }

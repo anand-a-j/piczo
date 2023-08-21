@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/providers/user_provider/user_provider.dart';
+import 'package:piczo/resources/auth_methods.dart';
+import 'package:piczo/resources/firestore_method.dart';
+import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +124,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   .instance.currentUser!.uid ==
                                               widget.uid
                                           ? ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                await AuthMethods().signOut();
+                                                showSnackBar(
+                                                    "Logout successfully",
+                                                    context,
+                                                    AnimatedSnackBarType.info);
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LoginScreen()));
+                                              },
                                               child: Text(
                                                 "Settings",
                                                 style: TextStyle(color: kWhite),
@@ -142,7 +156,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             )
                                           : isFollowing
                                               ? ElevatedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () async {
+                                                    await FirestoreMethods()
+                                                        .followUser(
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid,
+                                                            userData['uid']);
+                                                    setState(() {
+                                                      isFollowing = false;
+                                                      following--;
+                                                    });
+                                                  },
                                                   child: Text(
                                                     "Unfollow",
                                                     style: TextStyle(
@@ -164,7 +190,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ),
                                                 )
                                               : ElevatedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () async {
+                                                    await FirestoreMethods()
+                                                        .followUser(
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid,
+                                                            userData['uid']);
+                                                    setState(() {
+                                                      isFollowing = true;
+                                                      following++;
+                                                    });
+                                                  },
                                                   child: Text(
                                                     "Follow",
                                                     style: TextStyle(
@@ -237,8 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisSpacing: 1.5,
                                   childAspectRatio: 1),
                           itemBuilder: (context, index) {
-                            var snap =
-                                (snapshot.data! as dynamic).docs[index];
+                            var snap = (snapshot.data! as dynamic).docs[index];
                             return Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
