@@ -1,115 +1,258 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:piczo/providers/user_provider/user_provider.dart';
 import 'package:piczo/utils/colors.dart';
+import 'package:piczo/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String uid;
+  const ProfileScreen({super.key, required this.uid});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var userData = {};
+  int postLength = 0;
+  int followers = 0;
+  int following = 0;
+  bool isFollowing = false;
+  bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      var userSnap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .get();
+
+      // get post length
+      var postSnap = await FirebaseFirestore.instance
+          .collection('posts')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      userData = userSnap.data()!;
+      postLength = postSnap.docs.length;
+      followers = userSnap['followers'].length;
+      following = userSnap['following'].length;
+      isFollowing = userSnap['followers']
+          .contains(FirebaseAuth.instance.currentUser!.uid);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      showSnackBar(e.toString(), context, AnimatedSnackBarType.warning);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 10,
-            ),
-            Container(
-
-              padding: EdgeInsets.all(12),
-              margin: EdgeInsets.all(12),
-              width: double.infinity,
-              height: 260,
-              child: Column(
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Scaffold(
+              body: Column(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage(
-                            "https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"),
-                      ),
-                      SizedBox(
-                        width: 40,
-                      ),
-                      
-                       Expanded(
-                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Anand",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
-                                    color: kWhite),
-                              ),
-                              Text(
-                                "Flutter Developer",
-                                style: TextStyle(color: kGrey),
-                              ),
-                              Text(
-                                "Dart | Flutter | Firebase",
-                                style: TextStyle(color: kWhite),
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: 100,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Follow",
-                                    style: TextStyle(color: kWhite),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    margin: EdgeInsets.all(12),
+                    width: double.infinity,
+                    //height: 260,
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundImage:
+                                  NetworkImage(userData['photoUrl']),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userData['username'],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28,
+                                        color: kWhite),
                                   ),
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll(primaryColor),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(50)),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5, bottom: 5, right: 5, left: 0),
+                                    height: 35,
+                                    width: double.infinity,
+                                    child: Text(
+                                      userData['bio'],
+                                      style: TextStyle(color: kGrey),
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  SizedBox(
+                                      height: 40,
+                                      width: 100,
+                                      child: FirebaseAuth
+                                                  .instance.currentUser!.uid ==
+                                              widget.uid
+                                          ? ElevatedButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                "Settings",
+                                                style: TextStyle(color: kWhite),
+                                              ),
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        primaryColor),
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50)),
+                                                ),
+                                              ),
+                                            )
+                                          : isFollowing
+                                              ? ElevatedButton(
+                                                  onPressed: () {},
+                                                  child: Text(
+                                                    "Unfollow",
+                                                    style: TextStyle(
+                                                        color: kWhite),
+                                                  ),
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStatePropertyAll(
+                                                            primaryColor),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      50)),
+                                                    ),
+                                                  ),
+                                                )
+                                              : ElevatedButton(
+                                                  onPressed: () {},
+                                                  child: Text(
+                                                    "Follow",
+                                                    style: TextStyle(
+                                                        color: kWhite),
+                                                  ),
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStatePropertyAll(
+                                                            primaryColor),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      50)),
+                                                    ),
+                                                  ),
+                                                ))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                            height: 60,
+                            width: double.infinity,
+                            padding: EdgeInsets.all(8),
+                            margin: EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CountContainer(
+                                    count: postLength.toString(),
+                                    title: "post"),
+                                CountContainer(
+                                    count: followers.toString(),
+                                    title: "Followers"),
+                                CountContainer(
+                                    count: following.toString(),
+                                    title: "Following")
+                              ],
+                            )),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                  FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('posts')
+                        .where('uid', isEqualTo: widget.uid)
+                        .get(),
+                    builder: ((context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: (snapshot.data! as dynamic).docs.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 1.5,
+                                  childAspectRatio: 1),
+                          itemBuilder: (context, index) {
+                            var snap =
+                                (snapshot.data! as dynamic).docs[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(snap['postUrl']),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-
-                            ],
-                          ),
-                       ), 
-                    ],
-                  ),
-                   Container(
-                      height: 60,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(8),
-                      margin: EdgeInsets.all(20),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CountContainer(count: "38", title: "post"),
-                          CountContainer(count: "1350", title: "Followers"),
-                          CountContainer(count: "678", title: "Following")
-                        ],
-                      )),
-                  SizedBox(
-                    height: 20,
+                            );
+                          });
+                    }),
                   )
                 ],
               ),
             ),
-           
-          ],
-        ),
-      ),
     );
   }
 }
@@ -118,7 +261,9 @@ class CountContainer extends StatelessWidget {
   final String count;
   final String title;
   const CountContainer({
-    super.key, required this.count, required this.title,
+    super.key,
+    required this.count,
+    required this.title,
   });
 
   @override

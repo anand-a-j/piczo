@@ -30,12 +30,12 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     getComments();
     return Container(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin:const EdgeInsets.all(8),
+      padding:const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color(0xff202020),
+        color:const Color(0xff202020),
       ),
       child: Column(
         children: [
@@ -45,7 +45,8 @@ class PostCard extends StatelessWidget {
             ),
             title: Text(
               snap['username'],
-              style: TextStyle(fontWeight: FontWeight.bold, color: kWhite),
+              style:const TextStyle(fontWeight: FontWeight.bold, color: kWhite
+              ),
             ),
             trailing: IconButton(
                 onPressed: () => moreFunctions(context, snap),
