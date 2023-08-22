@@ -1,5 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/comment_screen/comment_screen.dart';
@@ -150,6 +151,7 @@ class PostCard extends StatelessWidget {
   }
 
   void moreFunctions(context, snap) {
+    var currentUser = FirebaseAuth.instance.currentUser!.uid;
     showBottomSheet(
         context: context,
         builder: (context) {
@@ -158,39 +160,44 @@ class PostCard extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.delete),
                 title: const Text("Delete Post"),
-                onTap: () async{
+                onTap: () async {
                   print("delete post button clicked");
                   // Widget okButton = TextButton(
-                      // onPressed: () {
-                        String response =
-                          await  FirestoreMethods().deletePost(snap['postId']);
-                        if (response == 'success'&&context.mounted) {
-                          Navigator.pop(context);
-                          showSnackBar("Post Deleted Successfully", context,
-                              AnimatedSnackBarType.info);
-                        }else{
-                          showSnackBar(response.toString(), context,
-                              AnimatedSnackBarType.warning);
-                        }
-                      },
-                  //     child: const Text("Ok"));
-                  // Widget cancelButton = TextButton(
-                  //     onPressed: () {
-                  //       Navigator.pop(context);
-                  //     },
-                  //     child: const Text("Cancel"));
+                  // onPressed: () {
+                  if (snap['uid'] == currentUser) {
+                    String response =
+                        await FirestoreMethods().deletePost(snap['postId']);
+                    if (response == 'success' && context.mounted) {
+                      Navigator.pop(context);
+                      showSnackBar("Post Deleted Successfully", context,
+                          AnimatedSnackBarType.info);
+                    } else {
+                      showSnackBar(response.toString(), context,
+                          AnimatedSnackBarType.warning);
+                    }
+                  } else {
+                    showSnackBar("You cannot delete this post", context,
+                        AnimatedSnackBarType.warning);
+                  }
+                },
+                //     child: const Text("Ok"));
+                // Widget cancelButton = TextButton(
+                //     onPressed: () {
+                //       Navigator.pop(context);
+                //     },
+                //     child: const Text("Cancel"));
 
-                  // AlertDialog alertBox = AlertDialog(
-                  //   title: const Text("Are you Sure!"),
-                  //   content: const Text("Do you wanna delete this post?"),
-                  //   actions: [
-                  //     cancelButton, 
-                  //     okButton
-                  //     ],
-                  // );
+                // AlertDialog alertBox = AlertDialog(
+                //   title: const Text("Are you Sure!"),
+                //   content: const Text("Do you wanna delete this post?"),
+                //   actions: [
+                //     cancelButton,
+                //     okButton
+                //     ],
+                // );
 
-                  // showDialog(context: context, builder: (context) => alertBox);
-                  // Navigator.pop(context);
+                // showDialog(context: context, builder: (context) => alertBox);
+                // Navigator.pop(context);
                 // },
               ),
               ListTile(
