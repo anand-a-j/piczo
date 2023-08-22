@@ -7,42 +7,39 @@ import 'package:piczo/utils/global_variables.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-   static ValueNotifier<int> selectedIndexNotifier = ValueNotifier(0);
+  static ValueNotifier<int> selectedIndexNotifier = ValueNotifier(0);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
- 
-  // String username = "";
+  //bool isLoading = false;
 
   // @override
   // void initState() {
   //   super.initState();
-  //   addData();
+  //   // getUserName();
   // }
 
-  // addData() async {
-  //   UserProvider _userProvider = Provider.of(context, listen: false);
-  //   await _userProvider.refreshUser();
-  // }
-
-  // getUserName() async {
+  // Future<bool> getUserName() async {
   //   DocumentSnapshot snap = await FirebaseFirestore.instance
   //       .collection("users")
   //       .doc(FirebaseAuth.instance.currentUser!.uid)
   //       .get();
-  //   print(snap.data()!);
-  //   print(snap.exists);
+  //   if (snap == null) {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //   }
   //   setState(() {
-  //     username = (snap.data() as Map<String, dynamic>)["username"];
+  //     isLoading = false;
   //   });
+  //   return isLoading;
   // }
 
   @override
   Widget build(BuildContext context) {
-   // model.User user = Provider.of<UserProvider>(context).getuser;
     return Scaffold(
       body: SafeArea(
         child: ValueListenableBuilder(

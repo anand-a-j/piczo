@@ -1,7 +1,7 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/main.dart';
 import 'package:piczo/resources/auth_methods.dart';
+import 'package:piczo/screens/home_screen/home_screen.dart';
 import 'package:piczo/screens/signup_screen/signup_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
@@ -28,8 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text, password: _passwordController.text);
 
     if (res == "Logged in successfully." && context.mounted) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePagee()));
+     
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) =>  HomeScreen()));
+      
       showSnackBar(res, context,AnimatedSnackBarType.success);
     } else {
       showSnackBar(res, context,AnimatedSnackBarType.error);

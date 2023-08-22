@@ -53,7 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
         showSnackBar(res, context,AnimatedSnackBarType.success);
       } else {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     } else {
       showSnackBar("Enter the data", context,AnimatedSnackBarType.error);
@@ -128,7 +128,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const LoginScreen()));

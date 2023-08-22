@@ -2,13 +2,12 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/providers/user_provider/user_provider.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
-import 'package:provider/provider.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
