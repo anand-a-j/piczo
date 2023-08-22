@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:piczo/utils/utils.dart';
 
 class PostCard extends StatelessWidget {
-  final snap;
+  final dynamic snap;
   PostCard({super.key, required this.snap});
   int commentLength = 0;
   void getComments() async {
@@ -30,12 +30,12 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     getComments();
     return Container(
-      margin:const EdgeInsets.all(8),
-      padding:const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color:const Color(0xff202020),
+        color: const Color(0xff202020),
       ),
       child: Column(
         children: [
@@ -45,8 +45,8 @@ class PostCard extends StatelessWidget {
             ),
             title: Text(
               snap['username'],
-              style:const TextStyle(fontWeight: FontWeight.bold, color: kWhite
-              ),
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, color: kWhite),
             ),
             trailing: IconButton(
                 onPressed: () => moreFunctions(context, snap),
@@ -158,30 +158,40 @@ class PostCard extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.delete),
                 title: const Text("Delete Post"),
-                onTap: () {
-                  Widget okButton = TextButton(
-                      onPressed: () async {
-                        await FirestoreMethods().deletePost(snap['postId']);
-                        Navigator.pop(context);
-                        showSnackBar("Post Deleted Successfully", context,
-                            AnimatedSnackBarType.info);
+                onTap: () async{
+                  print("delete post button clicked");
+                  // Widget okButton = TextButton(
+                      // onPressed: () {
+                        String response =
+                          await  FirestoreMethods().deletePost(snap['postId']);
+                        if (response == 'success'&&context.mounted) {
+                          Navigator.pop(context);
+                          showSnackBar("Post Deleted Successfully", context,
+                              AnimatedSnackBarType.info);
+                        }else{
+                          showSnackBar(response.toString(), context,
+                              AnimatedSnackBarType.warning);
+                        }
                       },
-                      child: const Text("Ok"));
-                  Widget cancelButton = TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Cancel"));
+                  //     child: const Text("Ok"));
+                  // Widget cancelButton = TextButton(
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  //     },
+                  //     child: const Text("Cancel"));
 
-                  AlertDialog alert = AlertDialog(
-                    title: const Text("Are you Sure!"),
-                    content: const Text("Do you wanna delete this post?"),
-                    actions: [cancelButton, okButton],
-                  );
+                  // AlertDialog alertBox = AlertDialog(
+                  //   title: const Text("Are you Sure!"),
+                  //   content: const Text("Do you wanna delete this post?"),
+                  //   actions: [
+                  //     cancelButton, 
+                  //     okButton
+                  //     ],
+                  // );
 
-                  showDialog(context: context, builder: (context) => alert);
-                  Navigator.pop(context);
-                },
+                  // showDialog(context: context, builder: (context) => alertBox);
+                  // Navigator.pop(context);
+                // },
               ),
               ListTile(
                 leading: const Icon(Icons.cancel),

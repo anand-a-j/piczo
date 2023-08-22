@@ -87,13 +87,16 @@ class FirestoreMethods {
   }
 
   /// Deleting post if user is the owner----------------------------------------
-  Future<void> deletePost(String postId) async {
+  Future<String> deletePost(String postId) async {
+    String res = 'Something went wrong';
     try {
-      // String res = "Something went wrong";
       await _firestore.collection('posts').doc(postId).delete();
+      res = 'success';
     } catch (e) {
       print("Error while deleting ${e.toString()}");
+      res = e.toString();
     }
+    return res;
   }
 
   /// following users-----------------------------------------------------------

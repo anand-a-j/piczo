@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:piczo/models/user_model.dart' as model;
 import 'package:piczo/resources/storage_methods.dart';
 
@@ -14,7 +13,7 @@ class AuthMethods {
     User currentUser = _auth.currentUser!;
     print("Current User =$currentUser");
     DocumentSnapshot snap =
-        await _firestore.collection('users').doc(currentUser.uid!).get();
+        await _firestore.collection('users').doc(currentUser.uid).get();
     return model.User.fromSnap(snap);
   }
 
@@ -76,7 +75,8 @@ class AuthMethods {
 
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        UserCredential cred = await _auth.signInWithEmailAndPassword(
+        //UserCredential cred =
+         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         res = "Logged in successfully.";
       } else {
