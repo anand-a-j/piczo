@@ -47,7 +47,8 @@ class AuthMethods {
             bio: bio,
             photoUrl: photoUrl,
             followers: [],
-            following: []);
+            following: [],
+            chattedUsers: []);
         // add user to database
         await _firestore
             .collection("users")
@@ -76,7 +77,7 @@ class AuthMethods {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         //UserCredential cred =
-         await _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         res = "Logged in successfully.";
       } else {
@@ -96,6 +97,6 @@ class AuthMethods {
 
   /// Sign out method-----------------------------------------------------------
   Future<void> signOut() async {
-   await _auth.signOut();
+    await _auth.signOut();
   }
 }

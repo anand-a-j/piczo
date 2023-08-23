@@ -8,15 +8,18 @@ class User {
   final String bio;
   final List followers;
   final List following;
+  final List chattedUsers;
 
-  User(
-      {required this.email,
-      required this.uid,
-      required this.photoUrl,
-      required this.username,
-      required this.bio,
-      required this.followers,
-      required this.following});
+  User({
+    required this.email,
+    required this.uid,
+    required this.photoUrl,
+    required this.username,
+    required this.bio,
+    required this.followers,
+    required this.following,
+    required this.chattedUsers
+  });
 
   Map<String, dynamic> toJson() => {
         'username': username,
@@ -26,6 +29,7 @@ class User {
         'bio': bio,
         'followers': followers,
         'following': following,
+        'chattedUsers':chattedUsers
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -38,7 +42,9 @@ class User {
         username: snapshot['username'],
         bio: snapshot['bio'],
         followers: snapshot['followers'],
-        following: snapshot['following']
+        following: snapshot['following'],
+        chattedUsers: snapshot['chattedUsers']
         );
+        
   }
 }
