@@ -14,11 +14,9 @@ class BottomNavBar extends StatelessWidget {
               type: BottomNavigationBarType.fixed,
               backgroundColor: kBlack,
               unselectedIconTheme: IconThemeData(color: kWhite),
-              selectedIconTheme: IconThemeData(
-                color: kWhite,
-              ),
+              selectedIconTheme: IconThemeData(color: kWhite),
               showSelectedLabels: false,
-              showUnselectedLabels: false,
+              showUnselectedLabels: false,   
               currentIndex: updatedIndex,
               onTap: (newIndex) {
                 HomeScreen.selectedIndexNotifier.value = newIndex;

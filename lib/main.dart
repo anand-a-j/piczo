@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Piczo',
         theme: ThemeData(
+          primarySwatch: Colors.purple,
           scaffoldBackgroundColor: kBlack,
           appBarTheme: const AppBarTheme(
             backgroundColor: kBlack

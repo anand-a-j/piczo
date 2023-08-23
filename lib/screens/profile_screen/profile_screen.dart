@@ -8,7 +8,6 @@ import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   final String uid;
   const ProfileScreen({super.key, required this.uid});
@@ -142,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               style: ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStatePropertyAll(
-                                                        primaryColor),
+                                                        primaryPurple),
                                                 shape:
                                                     MaterialStateProperty.all<
                                                         RoundedRectangleBorder>(
@@ -176,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
-                                                            primaryColor),
+                                                            primaryPurple),
                                                     shape: MaterialStateProperty
                                                         .all<
                                                             RoundedRectangleBorder>(
@@ -210,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
-                                                            primaryColor),
+                                                            primaryPurple),
                                                     shape: MaterialStateProperty
                                                         .all<
                                                             RoundedRectangleBorder>(

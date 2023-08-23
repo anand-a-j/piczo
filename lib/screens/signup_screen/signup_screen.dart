@@ -49,13 +49,13 @@ class _SignupScreenState extends State<SignupScreen> {
         isLoading = false;
       });
       if (res != "success" && context.mounted) {
-        showSnackBar(res, context,AnimatedSnackBarType.success);
+        showSnackBar(res, context, AnimatedSnackBarType.success);
       } else {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     } else {
-      showSnackBar("Enter the data", context,AnimatedSnackBarType.error);
+      showSnackBar("Enter the data", context, AnimatedSnackBarType.error);
     }
   }
 
@@ -74,7 +74,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     )
                   : CircleAvatar(
                       radius: 46,
-                      backgroundColor: primaryColor,
+                      backgroundColor: primaryPurple,
                     ),
               Positioned(
                 bottom: 0,
@@ -126,18 +126,17 @@ class _SignupScreenState extends State<SignupScreen> {
                 style: TextStyle(color: kGrey),
               ),
               TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
-                  },
-                  child: const Text(
-                    "Login here",
-                    style:
-                        TextStyle(color: kWhite, fontWeight: FontWeight.bold),
-                  ),
-                  ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
+                },
+                child: const Text(
+                  "Login here",
+                  style: TextStyle(color: kWhite, fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           )
         ],

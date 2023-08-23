@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// upload post-----------------------------------------------------------------
+/// upload post-----------------------------------------------------------------
   Future<String> uploadPost(String description, Uint8List file, String uid,
       String username, String profileImage) async {
     String res = "something went wrong!";
@@ -27,7 +27,7 @@ class FirestoreMethods {
           profileImage: profileImage,
           likes: []);
 
-      /// Upload post to firestore----------------------------------------------------
+/// Upload post to firestore----------------------------------------------------
       _firestore.collection('posts').doc(postId).set(post.toJson());
       res = "post uploaded successfully";
     } catch (e) {
@@ -36,7 +36,7 @@ class FirestoreMethods {
     return res;
   }
 
-  /// like posts------------------------------------------------------------------
+/// like posts------------------------------------------------------------------
   Future<void> likePost(String postId, String uid, List likes) async {
     try {
       // if already liked the post
@@ -54,7 +54,7 @@ class FirestoreMethods {
     }
   }
 
-  /// post comments---------------------------------------------------------------
+/// post comments---------------------------------------------------------------
   Future<String> postComment(String commentText, String postId, String uid,
       String username, String profilePic) async {
     String res = "something went wrong";
@@ -86,7 +86,7 @@ class FirestoreMethods {
     return res;
   }
 
-  /// Deleting post if user is the owner----------------------------------------
+/// Deleting post if user is the owner------------------------------------------
   Future<String> deletePost(String postId) async {
     String res = 'Something went wrong';
     try {

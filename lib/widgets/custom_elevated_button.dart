@@ -17,9 +17,12 @@ class CustomElevatedButton extends StatelessWidget {
       height: 40,
       width: double.infinity,
       margin: EdgeInsets.all(10),
-      color: primaryColor,
+     
       child: ElevatedButton(
           onPressed: isPressed,
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(primaryPurple)
+          ),
           child: isLoading == true
               ? Center(
                   child: CircularProgressIndicator(

@@ -126,7 +126,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         "Post",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: primaryColor,
+                            color: primaryPurple,
                             fontSize: 20),
                       ),
                     ),
