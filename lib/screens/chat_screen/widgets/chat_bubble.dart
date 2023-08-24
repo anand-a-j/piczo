@@ -22,17 +22,16 @@ class ChatBubble extends StatelessWidget {
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                //margin: EdgeInsets.all(8),
                 width: 140,
                 decoration: BoxDecoration(
-                    color: isMe ? primaryPurple : kBgGrey,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: const Radius.circular(10),
-                      topRight: const Radius.circular(10),
-                      topLeft: isMe ? const Radius.circular(10) : Radius.zero,
-                      bottomRight:
-                          isMe ? Radius.zero : const Radius.circular(10),
-                    )),
+                  color: isMe ? primaryPurple : kBgGrey,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: const Radius.circular(10),
+                    topRight: const Radius.circular(10),
+                    topLeft: isMe ? const Radius.circular(10) : Radius.zero,
+                    bottomRight: isMe ? Radius.zero : const Radius.circular(10),
+                  ),
+                ),
                 child: Text(
                   message['message'],
                   style: const TextStyle(color: kWhite),
@@ -41,10 +40,10 @@ class ChatBubble extends StatelessWidget {
               Text(
                 " ${GetTimeAgo.parse(message['time'].toDate())} ",
                 style: const TextStyle(color: kGrey, fontSize: 12),
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
