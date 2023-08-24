@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:uuid/uuid.dart';
 
-class chatMethods {
+class ChatMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> sendMessage(
@@ -49,6 +48,24 @@ class chatMethods {
     } catch (e) {
       print("chat method error ${e.toString()}");
     }
+  }
+
+  // Stream of names of subcollections in the current user doc in chats collection
+  Stream<List<Map<String, dynamic>>> getMessagedUsers(String currentUser) {
+    return _firestore
+        .collection('users')
+        .doc(currentUser)
+        .snapshots()
+        .map((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        List<Map<String, dynamic>> messages =
+            List.from((documentSnapshot.data() as dynamic)['chattedUsers']);
+        messages.sort((a, b) => b['time'].compateTo(a['time']));
+        return messages;
+      } else {
+        return [];
+      }
+    });
   }
 
   // Stream of messages in the subcollection of the current user doc in chats collection

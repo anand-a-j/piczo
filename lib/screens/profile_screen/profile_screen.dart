@@ -223,7 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     ),
                                                   FirebaseAuth.instance.currentUser!.uid ==widget.uid ? Container(color: Colors.amber,):  ElevatedButton(
                                         onPressed: () async {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatDetailsScreen(username: userData['uid'], profileImage: userData[
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatDetailsScreen(username: userData['username'], profileImage: userData[
                                                                         'photoUrl'], chatWith: widget.uid)));
                                         },
                                         child: Text(

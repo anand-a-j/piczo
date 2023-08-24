@@ -31,7 +31,7 @@ class ChatDetailsScreen extends StatelessWidget {
         ),
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: chatMethods()
+        stream: ChatMethods()
             .getMessageInChat(FirebaseAuth.instance.currentUser!.uid, chatWith),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -65,6 +65,8 @@ class ChatDetailsScreen extends StatelessWidget {
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Enter your message..."),
+                    
+                    style:TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -73,7 +75,7 @@ class ChatDetailsScreen extends StatelessWidget {
               if (chatController.text.isNotEmpty) {
                 String message = chatController.text;
                 chatController.clear();
-                await chatMethods().sendMessage(
+                await ChatMethods().sendMessage(
                     FirebaseAuth.instance.currentUser!.uid, chatWith, message);
               }
             },
