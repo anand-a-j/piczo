@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/resources/firestore_method.dart';
+import 'package:piczo/screens/chat_screen/chat_details_screen.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
@@ -115,112 +116,135 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(
                                     height: 12,
                                   ),
-                                  SizedBox(
-                                      height: 40,
-                                      width: 100,
-                                      child: FirebaseAuth
-                                                  .instance.currentUser!.uid ==
-                                              widget.uid
-                                          ? ElevatedButton(
-                                              onPressed: () async {
-                                                await AuthMethods().signOut();
-                                                showSnackBar(
-                                                    "Logout successfully",
-                                                    context,
-                                                    AnimatedSnackBarType.info);
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginScreen()));
-                                              },
-                                              child: Text(
-                                                "Settings",
-                                                style: TextStyle(color: kWhite),
-                                              ),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStatePropertyAll(
-                                                        primaryPurple),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                ),
-                                              ),
-                                            )
-                                          : isFollowing
+                                   Row(
+                                     children: [
+                                       FirebaseAuth
+                                                      .instance.currentUser!.uid ==
+                                                  widget.uid
                                               ? ElevatedButton(
                                                   onPressed: () async {
-                                                    await FirestoreMethods()
-                                                        .followUser(
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .currentUser!
-                                                                .uid,
-                                                            userData['uid']);
-                                                    setState(() {
-                                                      isFollowing = false;
-                                                      following--;
-                                                    });
+                                                    await AuthMethods().signOut();
+                                                    showSnackBar(
+                                                        "Logout successfully",
+                                                        context,
+                                                        AnimatedSnackBarType.info);
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                LoginScreen()));
                                                   },
                                                   child: Text(
-                                                    "Unfollow",
-                                                    style: TextStyle(
-                                                        color: kWhite),
+                                                    "Settings",
+                                                    style: TextStyle(color: kWhite),
                                                   ),
                                                   style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
                                                             primaryPurple),
-                                                    shape: MaterialStateProperty
-                                                        .all<
+                                                    shape:
+                                                        MaterialStateProperty.all<
                                                             RoundedRectangleBorder>(
                                                       RoundedRectangleBorder(
                                                           borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      50)),
+                                                              BorderRadius.circular(
+                                                                  50)),
                                                     ),
                                                   ),
                                                 )
-                                              : ElevatedButton(
-                                                  onPressed: () async {
-                                                    await FirestoreMethods()
-                                                        .followUser(
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .currentUser!
-                                                                .uid,
-                                                            userData['uid']);
-                                                    setState(() {
-                                                      isFollowing = true;
-                                                      following++;
-                                                    });
-                                                  },
-                                                  child: Text(
-                                                    "Follow",
-                                                    style: TextStyle(
-                                                        color: kWhite),
-                                                  ),
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStatePropertyAll(
-                                                            primaryPurple),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      50)),
+                                              : isFollowing
+                                                  ? ElevatedButton(
+                                                      onPressed: () async {
+                                                        await FirestoreMethods()
+                                                            .followUser(
+                                                                FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid,
+                                                                userData['uid']);
+                                                        setState(() {
+                                                          isFollowing = false;
+                                                          following--;
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Unfollow",
+                                                        style: TextStyle(
+                                                            color: kWhite),
+                                                      ),
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStatePropertyAll(
+                                                                primaryPurple),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : ElevatedButton(
+                                                      onPressed: () async {
+                                                        await FirestoreMethods()
+                                                            .followUser(
+                                                                FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid,
+                                                                userData['uid']);
+                                                        setState(() {
+                                                          isFollowing = true;
+                                                          following++;
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Follow",
+                                                        style: TextStyle(
+                                                            color: kWhite),
+                                                      ),
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStatePropertyAll(
+                                                                primaryPurple),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50)),
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ))
+                                                  FirebaseAuth.instance.currentUser!.uid ==widget.uid ? Container(color: Colors.amber,):  ElevatedButton(
+                                        onPressed: () async {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatDetailsScreen(username: userData['uid'], profileImage: userData[
+                                                                        'photoUrl'], chatWith: widget.uid)));
+                                        },
+                                        child: Text(
+                                          "Message",
+                                          style: TextStyle(color: kWhite),
+                                        ),
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  primaryPurple),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50)),
+                                          ),
+                                        ),
+                                      )
+                                     ],
+                                   ),
+                                   
                                 ],
                               ),
                             ),

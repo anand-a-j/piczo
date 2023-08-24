@@ -10,6 +10,6 @@ List<Widget> pages = [
  const FeedScreen(),
  const SearchScreen(),
   const AddPostScreen(),
- const ChatDetailsScreen(),
+  Center(child: Text("Chat screen"),),
   ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,)
 ];
