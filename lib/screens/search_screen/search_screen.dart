@@ -1,22 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:piczo/providers/loading_provider.dart';
 import 'package:piczo/screens/profile_screen/profile_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-TextEditingController _searchController = TextEditingController();
-bool isShowUsers = false;
-
-class _SearchScreenState extends State<SearchScreen> {
-  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LoadingProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: TextFormField(
@@ -31,12 +26,10 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             style: const TextStyle(color: kGrey),
             onFieldSubmitted: (String _) {
-              setState(() {
-                isShowUsers = true;
-              });
+              provider.changeIsLoading = true;
             }),
       ),
-      body: isShowUsers
+      body: provider.isLoading
           ? FutureBuilder(
               future: FirebaseFirestore.instance
                   .collection('users')
@@ -44,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       isGreaterThanOrEqualTo: _searchController.text.trim())
                   .get(),
               builder: (context, snapshot) {
-                if(snapshot.connectionState==ConnectionState.waiting){
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
@@ -52,11 +45,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 if (snapshot.hasData) {
                   print("snap data:${snapshot.data}");
                 }
-                // if (!snapshot.hasData) {
-                //   return const Center(
-                //     child: CircularProgressIndicator(),
-                //   );
-                // }
 
                 return ListView.builder(
                   itemCount: (snapshot.data as dynamic).docs.length,
@@ -64,11 +52,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     return InkWell(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                    uid: (snapshot.data! as dynamic).docs[index]
-                                        ['uid'])));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                uid: (snapshot.data! as dynamic).docs[index]
+                                    ['uid']),
+                          ),
+                        );
                       },
                       child: ListTile(
                         leading: CircleAvatar(
@@ -78,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         title: Text(
                             (snapshot.data! as dynamic).docs[index]['username'],
-                            style: TextStyle(color: kWhite)),
+                            style: const TextStyle(color: kWhite)),
                       ),
                     );
                   }),
@@ -95,11 +85,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                // if (!snapshot.hasData) {
-                //  return const Center(
-                //     child: CircularProgressIndicator(),
-                //   );
-                // }
 
                 return MasonryGridView.count(
                     padding: const EdgeInsets.all(10),
@@ -116,3 +101,5 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+
+TextEditingController _searchController = TextEditingController();

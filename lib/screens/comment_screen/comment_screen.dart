@@ -9,17 +9,10 @@ import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:provider/provider.dart';
 
-class CommentScreen extends StatefulWidget {
+class CommentScreen extends StatelessWidget {
   final snap;
   const CommentScreen({super.key, required this.snap});
 
-  @override
-  State<CommentScreen> createState() => _CommentScreenState();
-}
-
-TextEditingController _commentController = TextEditingController();
-
-class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser!;
@@ -33,9 +26,9 @@ class _CommentScreenState extends State<CommentScreen> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .doc(widget.snap['postId'])
+            .doc(snap['postId'])
             .collection('comments')
-            .orderBy('datePublished',descending: true)
+            .orderBy('datePublished', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -43,10 +36,19 @@ class _CommentScreenState extends State<CommentScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          return ListView.builder(
-            itemCount: (snapshot.data! as dynamic).docs.length,
-            itemBuilder: (context, index) => CommentCard(
-              snap: (snapshot.data! as dynamic).docs[index],
+
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: (snapshot.data! as dynamic).docs.length,
+              itemBuilder: (context, index) => CommentCard(
+                snap: (snapshot.data! as dynamic).docs[index],
+              ),
+            );
+          }
+          return const Center(
+            child: Text(
+              "No Comments",
+              style: TextStyle(color: kWhite),
             ),
           );
         },
@@ -55,7 +57,7 @@ class _CommentScreenState extends State<CommentScreen> {
           child: Container(
         margin:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        padding: EdgeInsets.all(10),
+        padding:const EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -87,7 +89,7 @@ class _CommentScreenState extends State<CommentScreen> {
               onPressed: () async {
                 String response = await FirestoreMethods().postComment(
                     _commentController.text.trim(),
-                    widget.snap['postId'],
+                    snap['postId'],
                     user.uid,
                     user.username,
                     user.photoUrl);
@@ -111,3 +113,5 @@ class _CommentScreenState extends State<CommentScreen> {
     );
   }
 }
+
+TextEditingController _commentController = TextEditingController();

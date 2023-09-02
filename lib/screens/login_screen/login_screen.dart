@@ -1,6 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/providers/login_provider.dart';
+import 'package:piczo/providers/loading_provider.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/screens/home_screen/home_screen.dart';
 import 'package:piczo/screens/signup_screen/signup_screen.dart';
@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<LoginProvider>(context, listen: false);
+    final provider = Provider.of<LoadingProvider>(context, listen: false);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,9 +34,9 @@ class LoginScreen extends StatelessWidget {
             textInputType: TextInputType.text,
             isPass: true,
           ),
-          Consumer<LoginProvider>(
+          Consumer<LoadingProvider>(
             builder: ((context, value, child) {
-             return CustomElevatedButton(
+              return CustomElevatedButton(
                 title: "Login",
                 isPressed: () {
                   loginUser(context, provider);
@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void loginUser(BuildContext context, LoginProvider provider) async {
+  void loginUser(BuildContext context, LoadingProvider provider) async {
     provider.changeIsLoading = true;
     String res = await AuthMethods().loginUser(
         email: _emailController.text, password: _passwordController.text);

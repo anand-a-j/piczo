@@ -6,8 +6,11 @@ import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/chat_screen/chat_details_screen.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
+import 'package:piczo/screens/profile_screen/widgets/custom_button.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
+import 'widgets/count_section.dart';
+import 'widgets/post_grid.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -62,6 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
     return SafeArea(
       child: isLoading
           ? const Center(
@@ -72,13 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 10,
+                    height: MediaQuery.sizeOf(context).height * 0.02,
                   ),
                   Container(
-                    padding: EdgeInsets.all(12),
-                    margin: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.all(12),
                     width: double.infinity,
-                    //height: 260,
                     child: Column(
                       children: [
                         Row(
@@ -90,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   NetworkImage(userData['photoUrl']),
                             ),
                             SizedBox(
-                              width: 30,
+                              width: MediaQuery.sizeOf(context).width * 0.03,
                             ),
                             Expanded(
                               child: Column(
@@ -98,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   Text(
                                     userData['username'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 28,
                                         color: kWhite),
@@ -110,167 +113,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: double.infinity,
                                     child: Text(
                                       userData['bio'],
-                                      style: TextStyle(color: kGrey),
+                                      style: const TextStyle(color: kGrey),
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 12,
+                                    height: MediaQuery.sizeOf(context).height *
+                                        0.012,
                                   ),
-                                   Row(
-                                     children: [
-                                       FirebaseAuth
-                                                      .instance.currentUser!.uid ==
-                                                  widget.uid
-                                              ? ElevatedButton(
-                                                  onPressed: () async {
-                                                    await AuthMethods().signOut();
-                                                    showSnackBar(
-                                                        "Logout successfully",
-                                                        context,
-                                                        AnimatedSnackBarType.info);
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                LoginScreen()));
-                                                  },
-                                                  child: Text(
-                                                    "Settings",
-                                                    style: TextStyle(color: kWhite),
-                                                  ),
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStatePropertyAll(
-                                                            primaryPurple),
-                                                    shape:
-                                                        MaterialStateProperty.all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  50)),
-                                                    ),
-                                                  ),
-                                                )
-                                              : isFollowing
-                                                  ? ElevatedButton(
-                                                      onPressed: () async {
-                                                        await FirestoreMethods()
-                                                            .followUser(
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser!
-                                                                    .uid,
-                                                                userData['uid']);
-                                                        setState(() {
-                                                          isFollowing = false;
-                                                          following--;
-                                                        });
-                                                      },
-                                                      child: Text(
-                                                        "Unfollow",
-                                                        style: TextStyle(
-                                                            color: kWhite),
-                                                      ),
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStatePropertyAll(
-                                                                primaryPurple),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          50)),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : ElevatedButton(
-                                                      onPressed: () async {
-                                                        await FirestoreMethods()
-                                                            .followUser(
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser!
-                                                                    .uid,
-                                                                userData['uid']);
-                                                        setState(() {
-                                                          isFollowing = true;
-                                                          following++;
-                                                        });
-                                                      },
-                                                      child: Text(
-                                                        "Follow",
-                                                        style: TextStyle(
-                                                            color: kWhite),
-                                                      ),
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStatePropertyAll(
-                                                                primaryPurple),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          50)),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  FirebaseAuth.instance.currentUser!.uid ==widget.uid ? Container(color: Colors.amber,):  ElevatedButton(
-                                        onPressed: () async {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatDetailsScreen(username: userData['username'], profileImage: userData[
-                                                                        'photoUrl'], chatWith: widget.uid)));
-                                        },
-                                        child: Text(
-                                          "Message",
-                                          style: TextStyle(color: kWhite),
-                                        ),
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStatePropertyAll(
-                                                  primaryPurple),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50)),
-                                          ),
-                                        ),
-                                      )
-                                     ],
-                                   ),
-                                   
+                                  Row(
+                                    children: [
+                                      currentUserId == widget.uid
+                                          ? CustomButton(
+                                              title: "Settings",
+                                              onPressed: signOut)
+                                          : isFollowing
+                                              ? CustomButton(
+                                                  title: "Unfollow",
+                                                  onPressed: unfollowFun)
+                                              : CustomButton(
+                                                  title: "Follow",
+                                                  onPressed: followFun),
+                                      currentUserId == widget.uid
+                                          ? const SizedBox.shrink()
+                                          : CustomButton(title: "Message", onPressed: messageFunction)
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        Container(
-                            height: 60,
-                            width: double.infinity,
-                            padding: EdgeInsets.all(8),
-                            margin: EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                CountContainer(
-                                    count: postLength.toString(),
-                                    title: "post"),
-                                CountContainer(
-                                    count: followers.toString(),
-                                    title: "Followers"),
-                                CountContainer(
-                                    count: following.toString(),
-                                    title: "Following")
-                              ],
-                            )),
+                        CountSection(
+                            postLength: postLength,
+                            followers: followers,
+                            following: following),
                         SizedBox(
-                          height: 20,
+                          height: MediaQuery.sizeOf(context).height * 0.02,
                         )
                       ],
                     ),
@@ -283,30 +161,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         .get(),
                     builder: ((context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return GridView.builder(
-                          shrinkWrap: true,
-                          itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 1.5,
-                                  childAspectRatio: 1),
-                          itemBuilder: (context, index) {
-                            var snap = (snapshot.data! as dynamic).docs[index];
-                            return Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(snap['postUrl']),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            );
-                          });
+                      return PostsGrid(snaphot: snapshot);
                     }),
                   )
                 ],
@@ -314,32 +173,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
     );
   }
-}
 
-class CountContainer extends StatelessWidget {
-  final String count;
-  final String title;
-  const CountContainer({
-    super.key,
-    required this.count,
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          count,
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w500, color: kWhite),
+  void signOut() async {
+    await AuthMethods().signOut();
+    if (context.mounted) {
+      showSnackBar("Logout successfully", context, AnimatedSnackBarType.info);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
         ),
-        Text(
-          title,
-          style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w500, color: kGrey),
-        )
-      ],
+      );
+    }
+  }
+
+  void unfollowFun() async {
+    await FirestoreMethods()
+        .followUser(FirebaseAuth.instance.currentUser!.uid, userData['uid']);
+    setState(() {
+      isFollowing = false;
+      following--;
+    });
+  }
+
+  void followFun() async {
+    await FirestoreMethods()
+        .followUser(FirebaseAuth.instance.currentUser!.uid, userData['uid']);
+    setState(() {
+      isFollowing = true;
+      following++;
+    });
+  }
+  
+  void messageFunction() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatDetailsScreen(
+            username: userData['username'],
+            profileImage: userData['photoUrl'],
+            chatWith: widget.uid
+            ),
+      ),
     );
   }
 }

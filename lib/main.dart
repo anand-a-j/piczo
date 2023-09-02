@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/providers/login_provider.dart';
+import 'package:piczo/providers/add_post_provider.dart';
+import 'package:piczo/providers/loading_provider.dart';
 import 'package:piczo/providers/user_provider.dart';
 import 'package:piczo/screens/splash_screen/new_splash_screen.dart';
 import 'package:piczo/utils/colors.dart';
@@ -19,22 +20,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>UserProvider()),
-        ChangeNotifierProvider(create: (_)=>LoginProvider())
-        
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => LoadingProvider()),
+        ChangeNotifierProvider(create: (_)=> AddPostProvider())
       ],
       child: MaterialApp(
-        title: 'Piczo',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          scaffoldBackgroundColor: kBlack,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: kBlack
-          )
-          ),
-        home:const NewSplashScreen()
-      ),
+          title: 'Piczo',
+          theme: ThemeData(
+              primarySwatch: Colors.purple,
+              scaffoldBackgroundColor: kBlack,
+              appBarTheme: const AppBarTheme(backgroundColor: kBlack)),
+          home: const NewSplashScreen()),
     );
   }
 }
-

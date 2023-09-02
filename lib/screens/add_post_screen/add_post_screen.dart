@@ -3,6 +3,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:piczo/models/user_model.dart';
+import 'package:piczo/providers/add_post_provider.dart';
 import 'package:piczo/providers/user_provider.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/utils/colors.dart';
@@ -19,12 +20,11 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   Uint8List? _file;
-  bool _isLoading = false;
 
-  void postImage(String uid, String username, String profileImage) async {
-    setState(() {
-      _isLoading = true;
-    });
+  void postImage(String uid, String username, String profileImage,
+      BuildContext context) async {
+    final apProvider = Provider.of<AddPostProvider>(context, listen: false);
+    apProvider.changeIsLoading = true;
     try {
       String res = await FirestoreMethods().uploadPost(
           _descriptionController.text.trim(),
@@ -33,12 +33,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
           username,
           profileImage);
       if (res == "post uploaded successfully" && context.mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        apProvider.changeIsLoading = false;
         showSnackBar(
             "posted Successfully", context, AnimatedSnackBarType.success);
-        clearImage();
+        apProvider.resetImage();
       } else {
         showSnackBar(res, context, AnimatedSnackBarType.warning);
       }
@@ -46,58 +44,58 @@ class _AddPostScreenState extends State<AddPostScreen> {
       showSnackBar(e.toString(), context, AnimatedSnackBarType.error);
     }
   }
+ 
 
   _selectImage(BuildContext context) async {
-    return showBottomSheet(
-        context: context,
-        builder: (context) {
-          return Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera),
-                title: const Text("Take a photo"),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.camera);
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text("Pick from gallery"),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.cancel),
-                title: const Text("Cancel"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        });
-  }
-
-  void clearImage() {
-    setState(() {
-      _file = null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    showBottomSheet(
+          context: context,
+          builder: (context) {
+            return Wrap(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.camera),
+                  title: const Text("Take a photo"),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    Uint8List file = await pickImage(ImageSource.camera);
+                    setState(() {
+                      _file = file;
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text("Pick from gallery"),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    Uint8List file = await pickImage(ImageSource.gallery);
+                    setState(() {
+                      _file = file;
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.cancel),
+                  title: const Text("Cancel"),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          });
     });
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    final User? user = Provider.of<UserProvider>(context).getUser;
-    print(user);
-    print(_file);
+
+      final apProvider = Provider.of<AddPostProvider>(context, listen: false);
+      final User? user = Provider.of<UserProvider>(context).getUser;
+    
+
     return user == null
         ? const Center(
             child: CircularProgressIndicator(),
@@ -114,14 +112,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
             : Scaffold(
                 appBar: AppBar(
                   backgroundColor: kBlack,
-                  leading: IconButton(
-                      onPressed: clearImage,
-                      icon: const Icon(Icons.arrow_back)),
+                  leading: Consumer<AddPostProvider>(
+                    builder: (context, value, child) {
+                      return IconButton(
+                          onPressed: apProvider.resetImage(),
+                          icon: const Icon(Icons.arrow_back));
+                    },
+                  ),
                   title: const Text("Add post"),
                   actions: [
                     TextButton(
-                      onPressed: () =>
-                          postImage(user!.uid, user!.username, user.photoUrl),
+                      onPressed: () => postImage(
+                          user.uid, user.username, user.photoUrl, context),
                       child: const Text(
                         "Post",
                         style: TextStyle(
@@ -132,67 +134,71 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                   ],
                 ),
-                body: Column(
-                  children: [
-                    _isLoading
-                        ? const LinearProgressIndicator()
-                        : const SizedBox(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                body: Consumer<AddPostProvider>(
+                  builder: (context, value, child) {
+                    return Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 30,
-                            height: 50,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.amber,
-                              backgroundImage: NetworkImage(user!.photoUrl),
-                              radius: 24,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            height: 400,
-                            margin:
-                                EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                            padding: EdgeInsets.all(10),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 240,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: MemoryImage(_file!),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 190,
-                                    child: TextField(
-                                      controller: _descriptionController,
-                                      maxLines: 8,
-                                      decoration: InputDecoration(
-                                        hintText: "Enter the caption....",
-                                        hintStyle: TextStyle(color: kGrey),
-                                        border: InputBorder.none,
-                                      ),
-                                      style: TextStyle(color: kWhite),
-                                    ),
-                                  )
-                                ],
+                        apProvider.isLoading
+                            ? const LinearProgressIndicator()
+                            : const SizedBox(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: 30,
+                                height: 50,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.amber,
+                                  backgroundImage: NetworkImage(user!.photoUrl),
+                                  radius: 24,
+                                ),
                               ),
                             ),
-                          ),
+                            Expanded(
+                              child: Container(
+                                width: double.infinity,
+                                height: 400,
+                                margin: const EdgeInsets.only(
+                                    right: 10, top: 10, bottom: 10),
+                                padding: const EdgeInsets.all(10),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 240,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: MemoryImage(_file!),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 190,
+                                        child: TextField(
+                                          controller: _descriptionController,
+                                          maxLines: 8,
+                                          decoration: const InputDecoration(
+                                            hintText: "Enter the caption....",
+                                            hintStyle: TextStyle(color: kGrey),
+                                            border: InputBorder.none,
+                                          ),
+                                          style: const TextStyle(color: kWhite),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
               );
   }
