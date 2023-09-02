@@ -2,17 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/resources/chat_methods.dart';
 import 'package:piczo/screens/chat_screen/widgets/chat_bubble.dart';
+import 'package:piczo/utils/colors.dart';
 
 // ignore: must_be_immutable
 class ChatDetailsScreen extends StatelessWidget {
   final String username;
   final String profileImage;
   final String chatWith;
-  ChatDetailsScreen(
-      {super.key,
+
+  ChatDetailsScreen({
+      super.key,
       required this.username,
       required this.profileImage,
-      required this.chatWith});
+      required this.chatWith
+      });
 
   TextEditingController chatController = TextEditingController();
 
@@ -25,7 +28,7 @@ class ChatDetailsScreen extends StatelessWidget {
             CircleAvatar(
               backgroundImage: NetworkImage(profileImage),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 20),
             Text(username)
           ],
         ),
@@ -35,7 +38,7 @@ class ChatDetailsScreen extends StatelessWidget {
             .getMessageInChat(FirebaseAuth.instance.currentUser!.uid, chatWith),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -55,33 +58,43 @@ class ChatDetailsScreen extends StatelessWidget {
               });
         },
       ),
-      bottomNavigationBar: Row(
-        children: [
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.all(8),
-              child: TextField(
-                controller: chatController,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Enter your message..."),
-                    
-                    style:TextStyle(color: Colors.white),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          color: kBgGrey,
+          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin:const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+                  child: TextField(
+                    controller: chatController,
+                    decoration:const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Enter your message...",
+                        hintStyle: TextStyle(color: kGrey
+                        ),
+                        ),
+                        style:const TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
-            ),
+              FloatingActionButton.small(
+                onPressed: () async {
+                  if (chatController.text.isNotEmpty) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    String message = chatController.text;
+                    chatController.clear();
+                    await ChatMethods().sendMessage(
+                        FirebaseAuth.instance.currentUser!.uid, chatWith, message);
+                  }               
+                },
+                backgroundColor: primaryPurple,
+                child:const Icon(Icons.send),
+              )
+            ],
           ),
-          FloatingActionButton.small(
-            onPressed: () async {
-              if (chatController.text.isNotEmpty) {
-                String message = chatController.text;
-                chatController.clear();
-                await ChatMethods().sendMessage(
-                    FirebaseAuth.instance.currentUser!.uid, chatWith, message);
-              }
-            },
-            child: Icon(Icons.send),
-          )
-        ],
+        ),
       ),
     );
   }

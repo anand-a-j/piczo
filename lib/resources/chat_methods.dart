@@ -57,10 +57,13 @@ class ChatMethods {
         .doc(currentUser)
         .snapshots()
         .map((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.data() == null) {
+        print("Document snap is null");
+      }
       if (documentSnapshot.exists) {
-        List<Map<String, dynamic>> messages =
-            List.from((documentSnapshot.data() as dynamic)['chattedUsers']);
-        messages.sort((a, b) => b['time'].compateTo(a['time']));
+        List<Map<String, dynamic>> messages = List.from(
+            (documentSnapshot.data()! as Map<String, dynamic>)['chattedUsers']);
+        print("Success");
         return messages;
       } else {
         return [];

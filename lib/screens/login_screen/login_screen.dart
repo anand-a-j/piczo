@@ -1,5 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:piczo/providers/login_provider.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/screens/home_screen/home_screen.dart';
 import 'package:piczo/screens/signup_screen/signup_screen.dart';
@@ -7,42 +8,17 @@ import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:piczo/widgets/custom_elevated_button.dart';
 import 'package:piczo/widgets/custom_text_field.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false;
-
-  void loginUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-    String res = await AuthMethods().loginUser(
-        email: _emailController.text, password: _passwordController.text);
-
-    if (res == "Logged in successfully." && context.mounted) {
-     
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) =>  HomeScreen()));
-      
-      showSnackBar(res, context,AnimatedSnackBarType.success);
-    } else {
-      showSnackBar(res, context,AnimatedSnackBarType.error);
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -58,17 +34,23 @@ class _LoginScreenState extends State<LoginScreen> {
             textInputType: TextInputType.text,
             isPass: true,
           ),
-          CustomElevatedButton(
-            title: "Login",
-            isPressed: loginUser,
-            isLoading: _isLoading,
+          Consumer<LoginProvider>(
+            builder: ((context, value, child) {
+             return CustomElevatedButton(
+                title: "Login",
+                isPressed: () {
+                  loginUser(context, provider);
+                },
+                isLoading: provider.isLoading,
+              );
+            }),
           ),
           const SizedBox(
             height: 30,
           ),
           Row(
             children: [
-             const Text(
+              const Text(
                 "Are you new here?",
                 style: TextStyle(color: kGrey),
               ),
@@ -79,11 +61,32 @@ class _LoginScreenState extends State<LoginScreen> {
                         MaterialPageRoute(
                             builder: (context) => const SignupScreen()));
                   },
-                  child: const Text("Sign Up",style: TextStyle(color: kWhite,fontWeight: FontWeight.bold),))
+                  child: const Text(
+                    "Sign Up",
+                    style:
+                        TextStyle(color: kWhite, fontWeight: FontWeight.bold),
+                  ))
             ],
           )
         ],
       ),
     );
+  }
+
+  void loginUser(BuildContext context, LoginProvider provider) async {
+    provider.changeIsLoading = true;
+    String res = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+
+    if (res == "Logged in successfully." && context.mounted) {
+      provider.changeIsLoading = false;
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+
+      showSnackBar(res, context, AnimatedSnackBarType.success);
+    } else {
+      provider.changeIsLoading = false;
+      showSnackBar(res, context, AnimatedSnackBarType.error);
+    }
   }
 }

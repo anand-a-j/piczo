@@ -131,16 +131,17 @@ class FirestoreMethods {
   }
 
   /// Get users data from uid---------------------------------------------------
-  Future<Map<String, dynamic>> getUserData(String uid) async {
-    Map<String, dynamic> userData = {};
+  Future<Map<String, dynamic>> getUserDataF(String uid) async {
+    Map<String, dynamic> usersData = {};
 
     try {
       DocumentSnapshot snap =
           await _firestore.collection('users').doc(uid).get();
-      userData = snap.data()! as dynamic;
+      usersData = snap.data()! as dynamic;
+      print("Users data fetch successfully");
     } catch (e) {
       print("Get user from uid error ${e.toString()}");
     }
-    return userData;
+    return usersData;
   }
 }

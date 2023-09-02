@@ -9,7 +9,8 @@ class CustomElevatedButton extends StatelessWidget {
       {super.key,
       required this.title,
       required this.isPressed,
-      required this.isLoading});
+      required this.isLoading
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,6 @@ class CustomElevatedButton extends StatelessWidget {
       height: 40,
       width: double.infinity,
       margin: EdgeInsets.all(10),
-     
       child: ElevatedButton(
           onPressed: isPressed,
           style: ButtonStyle(

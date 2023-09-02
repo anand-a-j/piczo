@@ -43,6 +43,6 @@ Widget _handleAuthState(BuildContext context) {
             child: CircularProgressIndicator(),
           );
         }
-        return const LoginScreen();
+        return LoginScreen();
       });
 }
