@@ -2,10 +2,8 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/chat_screen/chat_details_screen.dart';
-import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/screens/profile_screen/widgets/custom_button.dart';
 import 'package:piczo/screens/settings_screen/settings_screen.dart';
 import 'package:piczo/utils/colors.dart';
@@ -28,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       showSnackBar(e.toString(), context, AnimatedSnackBarType.warning);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ? CustomButton(
                                               title: "Settings",
                                               onPressed: () {
-                                                goToSettings(context);
+                                                goToSettings(context,userData['username'].toString());
                                               })
                                           : isFollowing
                                               ? CustomButton(
@@ -209,10 +209,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void goToSettings(BuildContext context) {
+  void goToSettings(BuildContext context,String name) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const SettingsScreen(),
+        builder: (context) =>  SettingsScreen(username: name,),
       ),
     );
   }

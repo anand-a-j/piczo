@@ -2,13 +2,17 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
+import 'package:piczo/screens/settings_screen/widgets/about_us.dart';
 import 'package:piczo/screens/settings_screen/widgets/custom_button_container.dart';
 import 'package:piczo/screens/settings_screen/widgets/user_title.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 
+import 'widgets/privacy_policy.dart';
+
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  final String username;
+  const SettingsScreen({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +24,11 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          UserNameTitle(),
+          UserNameTitle(
+            username: username,
+          ),
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.04,
           ),
@@ -32,10 +39,16 @@ class SettingsScreen extends StatelessWidget {
                   icon: Icons.edit, onPressed: () {}, title: "Editt Profile"),
               CustomButtonContainer(
                   icon: Icons.policy,
-                  onPressed: () {},
+                  onPressed: () {
+                    privacyPolicySheet(context);
+                  },
                   title: "Privacy Policy"),
               CustomButtonContainer(
-                  icon: Icons.people, onPressed: () {}, title: "About Us"),
+                  icon: Icons.people,
+                  onPressed: () {
+                    aboutUsSheet(context);
+                  },
+                  title: "About Us"),
               CustomButtonContainer(
                   icon: Icons.logout,
                   onPressed: () {

@@ -34,6 +34,5 @@ class CustomButtonContainer extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
