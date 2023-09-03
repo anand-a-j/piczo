@@ -7,6 +7,7 @@ import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/chat_screen/chat_details_screen.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/screens/profile_screen/widgets/custom_button.dart';
+import 'package:piczo/screens/settings_screen/settings_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'widgets/count_section.dart';
@@ -125,7 +126,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       currentUserId == widget.uid
                                           ? CustomButton(
                                               title: "Settings",
-                                              onPressed: signOut)
+                                              onPressed: () {
+                                                goToSettings(context);
+                                              })
                                           : isFollowing
                                               ? CustomButton(
                                                   title: "Unfollow",
@@ -135,7 +138,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   onPressed: followFun),
                                       currentUserId == widget.uid
                                           ? const SizedBox.shrink()
-                                          : CustomButton(title: "Message", onPressed: messageFunction)
+                                          : CustomButton(
+                                              title: "Message",
+                                              onPressed: messageFunction)
                                     ],
                                   ),
                                 ],
@@ -174,19 +179,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void signOut() async {
-    await AuthMethods().signOut();
-    if (context.mounted) {
-      showSnackBar("Logout successfully", context, AnimatedSnackBarType.info);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ),
-      );
-    }
-  }
-
   void unfollowFun() async {
     await FirestoreMethods()
         .followUser(FirebaseAuth.instance.currentUser!.uid, userData['uid']);
@@ -204,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       following++;
     });
   }
-  
+
   void messageFunction() {
     Navigator.push(
       context,
@@ -212,8 +204,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (context) => ChatDetailsScreen(
             username: userData['username'],
             profileImage: userData['photoUrl'],
-            chatWith: widget.uid
-            ),
+            chatWith: widget.uid),
+      ),
+    );
+  }
+
+  void goToSettings(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
       ),
     );
   }

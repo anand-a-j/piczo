@@ -22,15 +22,18 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => LoadingProvider()),
-        ChangeNotifierProvider(create: (_)=> AddPostProvider())
+        ChangeNotifierProvider(create: (_) => AddPostProvider())
       ],
       child: MaterialApp(
-          title: 'Piczo',
-          theme: ThemeData(
-              primarySwatch: Colors.purple,
-              scaffoldBackgroundColor: kBlack,
-              appBarTheme: const AppBarTheme(backgroundColor: kBlack)),
-          home: const NewSplashScreen()),
+        debugShowCheckedModeBanner: false,
+        title: 'Piczo',
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+          scaffoldBackgroundColor: kBlack,
+          appBarTheme: const AppBarTheme(backgroundColor: kBlack),
+        ),
+        home: const NewSplashScreen(),
+      ),
     );
   }
 }

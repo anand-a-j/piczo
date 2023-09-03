@@ -9,10 +9,11 @@ import 'package:piczo/utils/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:piczo/utils/utils.dart';
 
+// ignore: must_be_immutable
 class PostCard extends StatelessWidget {
   final dynamic snap;
   PostCard({super.key, required this.snap});
-  int commentLength = 0;
+ int commentLength = 0;
   void getComments() async {
     try {
       QuerySnapshot snaps = await FirebaseFirestore.instance
@@ -57,9 +58,9 @@ class PostCard extends StatelessWidget {
                 )),
           ),
           Container(
-            margin: EdgeInsets.all(5),
+            margin:const EdgeInsets.all(5),
             width: double.maxFinite,
-            height: 275,
+            height: MediaQuery.sizeOf(context).height*0.3,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
@@ -69,7 +70,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+            padding:const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             child: SizedBox(
               width: double.infinity,
               height: 30,
@@ -78,11 +79,8 @@ class PostCard extends StatelessWidget {
                   LikeButton(
                     snap: snap,
                   ),
-                  // Icon(
-                  //   Icons.favorite_border_outlined,
-                  //   color: Colors.white,
-                  // ),
-                  SizedBox(
+                 
+                 const SizedBox(
                     width: 5,
                   ),
                   Text(
@@ -96,13 +94,15 @@ class PostCard extends StatelessWidget {
                     onPressed: () {
                       print(snap);
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CommentScreen(
-                                    snap: snap,
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CommentScreen(
+                            snap: snap,
+                          ),
+                        ),
+                      );
                     },
-                    icon: Icon(Icons.comment_outlined),
+                    icon:const Icon(Icons.comment_outlined),
                     color: Colors.white,
                   ),
                   SizedBox(
@@ -110,21 +110,21 @@ class PostCard extends StatelessWidget {
                   ),
                   Text(
                     commentLength.toString(),
-                    style: TextStyle(color: Colors.white),
+                    style:const TextStyle(color: Colors.white),
                   ),
-                  SizedBox(
+                 const SizedBox(
                     width: 5,
                   ),
-                  Icon(
+                 const Icon(
                     Icons.comment_outlined,
                     color: Colors.white,
                   ),
-                  Spacer(),
+                 const Spacer(),
                   Text(
                     DateFormat().add_yMMMd().format(
                           snap['datePublished'].toDate(),
                         ),
-                    style: TextStyle(color: Colors.white),
+                    style:const TextStyle(color: Colors.white),
                   ),
                 ],
               ),
@@ -135,7 +135,7 @@ class PostCard extends StatelessWidget {
             width: double.infinity,
             child: RichText(
               text: TextSpan(
-                style: TextStyle(color: kWhite),
+                style:const TextStyle(color: kWhite),
                 children: [
                   TextSpan(
                       text: "${snap['username']}  ",

@@ -1,0 +1,64 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:piczo/resources/auth_methods.dart';
+import 'package:piczo/screens/login_screen/login_screen.dart';
+import 'package:piczo/screens/settings_screen/widgets/custom_button_container.dart';
+import 'package:piczo/screens/settings_screen/widgets/user_title.dart';
+import 'package:piczo/utils/colors.dart';
+import 'package:piczo/utils/utils.dart';
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Settings",
+          style: TextStyle(fontWeight: FontWeight.bold, color: kWhite),
+        ),
+      ),
+      body: Column(
+        children: [
+          UserNameTitle(),
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.04,
+          ),
+          ListView(
+            shrinkWrap: true,
+            children: [
+              CustomButtonContainer(
+                  icon: Icons.edit, onPressed: () {}, title: "Editt Profile"),
+              CustomButtonContainer(
+                  icon: Icons.policy,
+                  onPressed: () {},
+                  title: "Privacy Policy"),
+              CustomButtonContainer(
+                  icon: Icons.people, onPressed: () {}, title: "About Us"),
+              CustomButtonContainer(
+                  icon: Icons.logout,
+                  onPressed: () {
+                    signOut(context);
+                  },
+                  title: "Log Out")
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void signOut(BuildContext context) async {
+    await AuthMethods().signOut();
+    if (context.mounted) {
+      showSnackBar("Logout successfully", context, AnimatedSnackBarType.info);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+      );
+    }
+  }
+}
