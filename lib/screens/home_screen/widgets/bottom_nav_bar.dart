@@ -13,8 +13,8 @@ class BottomNavBar extends StatelessWidget {
           return BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               backgroundColor: kBlack,
-              unselectedIconTheme: IconThemeData(color: kWhite),
-              selectedIconTheme: IconThemeData(color: kWhite),
+              unselectedIconTheme:const IconThemeData(color: kWhite,weight: 100,grade: -25,),
+              selectedIconTheme: IconThemeData(color: Colors.purple.shade300,weight: 700,grade: 200),
               showSelectedLabels: false,
               showUnselectedLabels: false,   
               currentIndex: updatedIndex,
