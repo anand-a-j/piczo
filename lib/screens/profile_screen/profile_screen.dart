@@ -2,12 +2,14 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:piczo/providers/user_provider.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/chat_screen/chat_details_screen.dart';
 import 'package:piczo/screens/profile_screen/widgets/custom_button.dart';
 import 'package:piczo/screens/settings_screen/settings_screen.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
+import 'package:provider/provider.dart';
 import 'widgets/count_section.dart';
 import 'widgets/post_grid.dart';
 
@@ -30,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    Provider.of<UserProvider>(context, listen: false).refreshUser();
     getData();
   }
 
@@ -62,7 +65,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       showSnackBar(e.toString(), context, AnimatedSnackBarType.warning);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +129,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ? CustomButton(
                                               title: "Settings",
                                               onPressed: () {
-                                                goToSettings(context,userData['username'].toString());
+                                                goToSettings(
+                                                    context,
+                                                    userData['username']
+                                                        .toString());
                                               })
                                           : isFollowing
                                               ? CustomButton(
@@ -209,10 +214,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void goToSettings(BuildContext context,String name) {
+  void goToSettings(BuildContext context, String name) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) =>  SettingsScreen(username: name,),
+        builder: (context) => SettingsScreen(
+          username: name,
+        ),
       ),
     );
   }

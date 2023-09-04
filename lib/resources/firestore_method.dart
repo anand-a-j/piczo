@@ -144,4 +144,21 @@ class FirestoreMethods {
     }
     return usersData;
   }
+
+  /// Update username and bio
+  Future<String> updateUsernameAndBio(
+      String uid, String username, String bio) async {
+    String res = "Something went wrong";
+    try {
+      _firestore
+          .collection('users')
+          .doc(uid)
+          .update({'username': username, 'bio': bio});
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+      return res;
+    }
+    return res;
+  }
 }

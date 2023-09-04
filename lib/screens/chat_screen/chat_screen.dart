@@ -13,7 +13,7 @@ class ChatScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chats"),
+        title:const Text("Chats"),
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
           stream: ChatMethods()
@@ -31,11 +31,11 @@ class ChatScreen extends StatelessWidget {
                       future:
                           FirestoreMethods().getUserDataF(snap[index]['user']),
                       builder: (context, assnapshot) {
-                        AsyncSnapshot<Map<String, dynamic>>? assSnap = assnapshot;
-                        if(assSnap==null){
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                        // AsyncSnapshot<Map<String, dynamic>>? assSnap = assnapshot;
+                        // if(assSnap==null){
+                        //   return const Center(
+                        //       child: CircularProgressIndicator());
+                        // }
                         if (!assnapshot.hasData) {
                           return const SizedBox();
                         }

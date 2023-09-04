@@ -10,22 +10,21 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inputDecoration = OutlineInputBorder(
+    const inputDecoration =  OutlineInputBorder(
       borderSide: BorderSide(
-        color: kGrey,
-        
+        color: kGrey,  
       )
     );
     return Padding(
       padding: EdgeInsets.all(10),
-      child: TextField(
+      child: TextField( 
         controller: textController,
-        decoration: InputDecoration(
+        decoration: InputDecoration( 
           isDense: true,
           border: inputDecoration,
           enabledBorder: inputDecoration,
           hintText: hintText,
-          hintStyle: TextStyle(color: kGrey),
+          hintStyle:const TextStyle(color: kGrey),
           filled: true,
           fillColor: kBgGrey,
           focusedBorder: inputDecoration,

@@ -44,11 +44,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
       showSnackBar(e.toString(), context, AnimatedSnackBarType.error);
     }
   }
- 
 
   _selectImage(BuildContext context) async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    showBottomSheet(
+      showBottomSheet(
           context: context,
           builder: (context) {
             return Wrap(
@@ -86,16 +85,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
             );
           });
     });
-    
   }
 
   @override
   Widget build(BuildContext context) {
-
-      final apProvider = Provider.of<AddPostProvider>(context, listen: false);
-      final User? user = Provider.of<UserProvider>(context).getUser;
-    
-
+    final apProvider = Provider.of<AddPostProvider>(context, listen: false);
+    final User? user = Provider.of<UserProvider>(context).getUser;
     return user == null
         ? const Center(
             child: CircularProgressIndicator(),

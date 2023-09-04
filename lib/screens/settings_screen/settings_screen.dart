@@ -1,6 +1,7 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:piczo/resources/auth_methods.dart';
+import 'package:piczo/screens/edit_screen.dart/edit_screen.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/screens/settings_screen/widgets/about_us.dart';
 import 'package:piczo/screens/settings_screen/widgets/custom_button_container.dart';
@@ -36,7 +37,11 @@ class SettingsScreen extends StatelessWidget {
             shrinkWrap: true,
             children: [
               CustomButtonContainer(
-                  icon: Icons.edit, onPressed: () {}, title: "Editt Profile"),
+                  icon: Icons.edit,
+                  onPressed: () {
+                    goToEditScreen(context);
+                  },
+                  title: "Edit Profile"),
               CustomButtonContainer(
                   icon: Icons.policy,
                   onPressed: () {
@@ -73,5 +78,14 @@ class SettingsScreen extends StatelessWidget {
         ),
       );
     }
+  }
+
+  void goToEditScreen(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditProfileScreen(),
+      ),
+    );
   }
 }
