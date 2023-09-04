@@ -11,14 +11,14 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<LoadingProvider>(context, listen: false);
+    final provider = Provider.of<LoadingProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: TextFormField(
             controller: _searchController,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
-              hintText: "Search here",
+              prefixIcon: const Icon(Icons.search,color: kWhite,),
+              hintText: "Search users here",
               hintStyle: const TextStyle(color: kGrey),
               filled: true,
               fillColor: kBlack.withOpacity(0.7),
@@ -29,7 +29,9 @@ class SearchScreen extends StatelessWidget {
               provider.changeIsLoading = true;
             }),
       ),
-      body: provider.isLoading
+      body: _searchController.text != '' &&
+              Provider.of<LoadingProvider>(context, listen: true).isLoading ==
+                  true
           ? FutureBuilder(
               future: FirebaseFirestore.instance
                   .collection('users')
@@ -42,10 +44,11 @@ class SearchScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (snapshot.hasData) {
-                  print("snap data:${snapshot.data}");
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-
                 return ListView.builder(
                   itemCount: (snapshot.data as dynamic).docs.length,
                   itemBuilder: ((context, index) {
@@ -78,14 +81,16 @@ class SearchScreen extends StatelessWidget {
           : FutureBuilder(
               future: FirebaseFirestore.instance.collection('posts').get(),
               builder: (context, snapshot) {
-                print(
-                    "Length of snapshot :-${(snapshot.data as dynamic)}))                                                                                                          as dynamic).docs.length}");
-                if (snapshot.data == null) {
+                if(!snapshot.hasData){
+                   return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.data == null||snapshot.connectionState==ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-
                 return MasonryGridView.count(
                     padding: const EdgeInsets.all(10),
                     mainAxisSpacing: 10,
