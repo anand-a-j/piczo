@@ -63,7 +63,7 @@ class ChatMethods {
       if (documentSnapshot.exists) {
         List<Map<String, dynamic>> messages = List.from(
             (documentSnapshot.data()! as Map<String, dynamic>)['chattedUsers']);
-        print("Success");
+        
         return messages;
       } else {
         return [];

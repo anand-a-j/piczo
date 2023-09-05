@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:piczo/resources/chat_methods.dart';
 import 'package:piczo/resources/firestore_method.dart';
+import 'package:piczo/screens/chat_screen/chat_details_screen.dart';
+import 'package:piczo/utils/colors.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -13,13 +16,13 @@ class ChatScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:const Text("Chats"),
+        elevation: 20,
+        title: const Text("Chats"),
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
           stream: ChatMethods()
               .getMessagedUsers(FirebaseAuth.instance.currentUser!.uid),
           builder: (context, snapshot) {
-            print("Snapshot data :${snapshot.data}");
             List? snap = snapshot.data;
             if (snap == null) {
               return const Center(child: CircularProgressIndicator());
@@ -31,21 +34,43 @@ class ChatScreen extends StatelessWidget {
                       future:
                           FirestoreMethods().getUserDataF(snap[index]['user']),
                       builder: (context, assnapshot) {
-                        // AsyncSnapshot<Map<String, dynamic>>? assSnap = assnapshot;
-                        // if(assSnap==null){
-                        //   return const Center(
-                        //       child: CircularProgressIndicator());
-                        // }
                         if (!assnapshot.hasData) {
-                          return const SizedBox();
+                          return const Center(
+                            child: Text(
+                              "No Messages",
+                              style: TextStyle(color: kWhite),
+                            ),
+                          );
                         }
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(assnapshot.data!['profileImage']),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatDetailsScreen(
+                                    username: assnapshot.data!['username'],
+                                    profileImage: assnapshot.data!['photoUrl'],
+                                    chatWith: assnapshot.data!['uid']
+                                ),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(assnapshot.data!['photoUrl']),
+                            ),
+                            title: Text(
+                              assnapshot.data!['username'],
+                              style: const TextStyle(color: kWhite),
+                            ),
+                            subtitle: Text(
+                              GetTimeAgo.parse(
+                                snapshot.data![index]['time'].toDate(),
+                              ),
+                              style: const TextStyle(color: kGrey),
+                            ),
                           ),
-                          title: Text(assnapshot.data!['username']),
-                          subtitle: Text('hey'),
                         );
                       });
                 },

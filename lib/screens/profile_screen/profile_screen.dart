@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final currentUserId = FirebaseAuth.instance.currentUser!.uid;
     return SafeArea(
-      child: isLoading
+      child: isLoading && userData.isEmpty
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -143,9 +143,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   onPressed: followFun),
                                       currentUserId == widget.uid
                                           ? const SizedBox.shrink()
-                                          : CustomButton(
-                                              title: "Message",
-                                              onPressed: messageFunction)
+                                          : SizedBox(
+                                            width: 10,
+                                            child: CustomButton(
+                                                title: "Message",
+                                                onPressed: messageFunction),
+                                          )
                                     ],
                                   ),
                                 ],

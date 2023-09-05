@@ -2,6 +2,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/comment_screen/comment_screen.dart';
 import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
@@ -121,9 +122,7 @@ class PostCard extends StatelessWidget {
                   ),
                  const Spacer(),
                   Text(
-                    DateFormat().add_yMMMd().format(
-                          snap['datePublished'].toDate(),
-                        ),
+                    GetTimeAgo.parse(snap['datePublished'].toDate()),
                     style:const TextStyle(color: Colors.white),
                   ),
                 ],
@@ -162,8 +161,6 @@ class PostCard extends StatelessWidget {
                 title: const Text("Delete Post"),
                 onTap: () async {
                   print("delete post button clicked");
-                  // Widget okButton = TextButton(
-                  // onPressed: () {
                   if (snap['uid'] == currentUser) {
                     String response =
                         await FirestoreMethods().deletePost(snap['postId']);
@@ -180,25 +177,6 @@ class PostCard extends StatelessWidget {
                         AnimatedSnackBarType.warning);
                   }
                 },
-                //     child: const Text("Ok"));
-                // Widget cancelButton = TextButton(
-                //     onPressed: () {
-                //       Navigator.pop(context);
-                //     },
-                //     child: const Text("Cancel"));
-
-                // AlertDialog alertBox = AlertDialog(
-                //   title: const Text("Are you Sure!"),
-                //   content: const Text("Do you wanna delete this post?"),
-                //   actions: [
-                //     cancelButton,
-                //     okButton
-                //     ],
-                // );
-
-                // showDialog(context: context, builder: (context) => alertBox);
-                // Navigator.pop(context);
-                // },
               ),
               ListTile(
                 leading: const Icon(Icons.cancel),
