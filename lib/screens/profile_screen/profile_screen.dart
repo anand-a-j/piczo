@@ -124,6 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         0.012,
                                   ),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       currentUserId == widget.uid
                                           ? CustomButton(
@@ -143,8 +144,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   onPressed: followFun),
                                       currentUserId == widget.uid
                                           ? const SizedBox.shrink()
-                                          : SizedBox(
-                                            width: 10,
+                                          : Padding(
+                                            padding: const EdgeInsets.only(left: 15,right: 0,top: 0,bottom: 0),
                                             child: CustomButton(
                                                 title: "Message",
                                                 onPressed: messageFunction),

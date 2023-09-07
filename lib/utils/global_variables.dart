@@ -7,9 +7,11 @@ import 'package:piczo/screens/profile_screen/profile_screen.dart';
 import 'package:piczo/screens/search_screen/search_screen.dart';
 
 List<Widget> pages = [
- const FeedScreen(),
- const SearchScreen(),
+  const FeedScreen(),
+  const SearchScreen(),
   const AddPostScreen(),
-  ChatScreen(),
-  ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,)
+  const ChatScreen(),
+  ProfileScreen(
+    uid: FirebaseAuth.instance.currentUser!.uid,
+  )
 ];

@@ -7,7 +7,6 @@ import 'package:piczo/resources/firestore_method.dart';
 import 'package:piczo/screens/comment_screen/comment_screen.dart';
 import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
 import 'package:piczo/utils/colors.dart';
-import 'package:intl/intl.dart';
 import 'package:piczo/utils/utils.dart';
 
 // ignore: must_be_immutable
@@ -112,13 +111,6 @@ class PostCard extends StatelessWidget {
                   Text(
                     commentLength.toString(),
                     style:const TextStyle(color: Colors.white),
-                  ),
-                 const SizedBox(
-                    width: 5,
-                  ),
-                 const Icon(
-                    Icons.comment_outlined,
-                    color: Colors.white,
                   ),
                  const Spacer(),
                   Text(

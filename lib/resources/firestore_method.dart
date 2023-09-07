@@ -145,7 +145,7 @@ class FirestoreMethods {
     return usersData;
   }
 
-  /// Update username and bio
+  /// Update username and bio---------------------------------------------------
   Future<String> updateUsernameAndBio(
       String uid, String username, String bio) async {
     String res = "Something went wrong";

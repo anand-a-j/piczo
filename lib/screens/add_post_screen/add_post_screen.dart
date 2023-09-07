@@ -146,7 +146,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 height: 50,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.amber,
-                                  backgroundImage: NetworkImage(user!.photoUrl),
+                                  backgroundImage: NetworkImage(user.photoUrl),
                                   radius: 24,
                                 ),
                               ),
