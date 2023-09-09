@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
       )
     );
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding:const EdgeInsets.all(10),
       child: TextField( 
         controller: textController,
         decoration: InputDecoration( 
