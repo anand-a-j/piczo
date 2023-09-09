@@ -5,11 +5,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:piczo/providers/loading_provider.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
+import 'package:piczo/screens/login_screen/widgets/signup_button_title.dart';
+import 'package:piczo/screens/signup_screen/widgets/sign_up_titles.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:piczo/widgets/custom_elevated_button.dart';
 import 'package:piczo/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
+import 'widgets/login_button_title.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -43,13 +46,11 @@ class _SignupScreenState extends State<SignupScreen> {
           username: _usernameController.text,
           bio: _bioController.text,
           file: _image!);
-      print(res);
       provider.changeIsLoading = false;
       if (res != "success" && context.mounted) {
         showSnackBar(res, context, AnimatedSnackBarType.success);
       } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        openLoginScreen();
       }
     } else {
       provider.changeIsLoading = false;
@@ -57,93 +58,100 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  openLoginScreen(){
+   Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LoadingProvider>(context, listen: false);
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              _image != null
-                  ? CircleAvatar(
-                      radius: 46,
-                      backgroundImage: MemoryImage(_image!),
-                    )
-                  : CircleAvatar(
-                      radius: 46,
-                      backgroundColor: primaryPurple,
-                    ),
-              Positioned(
-                bottom: 0,
-                right: 5,
-                child: CircleAvatar(
-                  backgroundColor: kBlack,
-                  radius: 16,
-                  child: CircleAvatar(
-                    radius: 14,
-                    child: IconButton(
-                      onPressed: selectImage,
-                      icon: const Icon(
-                        Icons.add_a_photo,
-                        size: 14,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SignUpTitle(),
+            Center(
+              child: Stack(
+                children: [
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 46,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 46,
+                          backgroundImage: NetworkImage("https://t3.ftcdn.net/jpg/00/64/67/80/240_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"),
+                        ),
+                  Positioned(
+                    bottom: 0,
+                    right: 5,
+                    child: CircleAvatar(
+                      backgroundColor: kBlack,
+                      radius: 16,
+                      child: CircleAvatar(
+                        radius: 14,
+                        child: IconButton(
+                          onPressed: selectImage,
+                          icon: const Icon(
+                            Icons.add_a_photo,
+                            size: 14,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.020,
+            ),
+            CustomTextField(
+                textController: _usernameController,
+                hintText: "Enter your username",
+                textInputType: TextInputType.text
                 ),
-              ),
-            ],
-          ),
-          CustomTextField(
-              textController: _usernameController,
-              hintText: "Enter your username",
-              textInputType: TextInputType.text),
-          CustomTextField(
-              textController: _emailController,
-              hintText: "Enter your email",
-              textInputType: TextInputType.emailAddress),
-          CustomTextField(
-            textController: _passwordController,
-            hintText: "Enter your password",
-            textInputType: TextInputType.text,
-            isPass: true,
-          ),
-          CustomTextField(
-              textController: _bioController,
-              hintText: "Enter your bio",
-              textInputType: TextInputType.text),
-          Consumer<LoadingProvider>(
-            builder: (context, value, child) {
-              return CustomElevatedButton(
-                title: "Sign Up",
-                isPressed: () {
-                  signUpUser(provider);
-                },
-                isLoading: provider.isLoading,
-              );
-            },
-          ),
-          Row(
-            children: [
-              const Text(
-                "Are you already login?",
-                style: TextStyle(color: kGrey),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
-                },
-                child: const Text(
-                  "Login here",
-                  style: TextStyle(color: kWhite, fontWeight: FontWeight.bold),
+            CustomTextField(
+                textController: _emailController,
+                hintText: "Enter your email",
+                textInputType: TextInputType.emailAddress
                 ),
-              ),
-            ],
-          )
-        ],
+            CustomTextField(
+              textController: _passwordController,
+              hintText: "Enter your password",
+              textInputType: TextInputType.text,
+              isPass: true,
+            ),
+            CustomTextField(
+                textController: _bioController,
+                hintText: "Enter your bio",
+                textInputType: TextInputType.text),
+            Consumer<LoadingProvider>(
+              builder: (context, value, child) {
+                return CustomElevatedButton(
+                  title: "Sign Up",
+                  isPressed: () {
+                    signUpUser(provider);
+                  },
+                  isLoading: provider.isLoading,
+                );
+              },
+            ),
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.03,
+            ),
+            const LoginButtonTitle()
+          ],
+        ),
       ),
     );
   }
 }
+

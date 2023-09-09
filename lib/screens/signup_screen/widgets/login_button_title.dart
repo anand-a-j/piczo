@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:piczo/screens/signup_screen/signup_screen.dart';
+import 'package:piczo/screens/login_screen/login_screen.dart';
 import 'package:piczo/utils/colors.dart';
 
-class SignUpTitle extends StatelessWidget {
-  const SignUpTitle({
+class LoginButtonTitle extends StatelessWidget {
+  const LoginButtonTitle({
     super.key,
   });
 
@@ -13,20 +13,20 @@ class SignUpTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Are you new here?",
+          "Are you already login?",
           style: TextStyle(color: kGrey),
         ),
         TextButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const SignupScreen(),
+                builder: (context) => LoginScreen(),
               ),
             );
           },
           child: const Text(
-            "Sign Up",
+            "Login here",
             style: TextStyle(color: kWhite, fontWeight: FontWeight.bold),
           ),
         ),

@@ -8,7 +8,7 @@ import 'package:piczo/utils/utils.dart';
 import 'package:piczo/widgets/custom_elevated_button.dart';
 import 'package:piczo/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
-import 'widgets/sign_up_title.dart';
+import 'widgets/signup_button_title.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               height: MediaQuery.sizeOf(context).height * 0.03,
             ),
-            const SignUpTitle()
+            const SignUpButtonTitle()
           ],
         ),
       ),
