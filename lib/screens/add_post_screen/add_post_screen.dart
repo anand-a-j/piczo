@@ -6,6 +6,7 @@ import 'package:piczo/models/user_model.dart';
 import 'package:piczo/providers/add_post_provider.dart';
 import 'package:piczo/providers/user_provider.dart';
 import 'package:piczo/resources/firestore_method.dart';
+import 'package:piczo/screens/add_post_screen/widgets/add_post_section.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -96,14 +97,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             child: CircularProgressIndicator(),
           )
         : _file == null && context.mounted
-            ? Center(
-                child: IconButton(
-                  onPressed: () => _selectImage(context),
-                  icon: const Icon(Icons.upload),
-                  color: kBgGrey,
-                  iconSize: 24,
-                ),
-              )
+            ? AddPostButton(onPressed: ()=> _selectImage(context))
             : Scaffold(
                 appBar: AppBar(
                   backgroundColor: kBlack,
