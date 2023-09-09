@@ -9,28 +9,40 @@ import 'package:piczo/screens/feed_screen/widgets/like_button.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
 
-// ignore: must_be_immutable
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final dynamic snap;
-  PostCard({super.key, required this.snap});
+  const PostCard({super.key, required this.snap});
+
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   int commentLength = 0;
+
   void getComments() async {
     try {
-      QuerySnapshot snaps = await FirebaseFirestore.instance
+      QuerySnapshot commentSnaps = await FirebaseFirestore.instance
           .collection('posts')
-          .doc(snap['postId'])
+          .doc(widget.snap['postId'])
           .collection('comments')
           .get();
-      print("getting comments");
-      commentLength = snaps.docs.length;
+      setState(() {
+        commentLength = commentSnaps.docs.length;
+      });
     } catch (e) {
       print("Something went wrong fetch comment= ${e.toString()}");
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     getComments();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -43,50 +55,47 @@ class PostCard extends StatelessWidget {
         children: [
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(snap['profileImage']),
+              backgroundImage: NetworkImage(widget.snap['profileImage']),
             ),
             title: Text(
-              snap['username'],
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, color: kWhite,fontSize: 16),
+              widget.snap['username'],
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: kWhite, fontSize: 18),
             ),
             trailing: IconButton(
-                onPressed: () => moreFunctions(context, snap),
+                onPressed: () => moreFunctions(context, widget.snap),
                 icon: const Icon(
                   Icons.more_horiz,
                   color: kGrey,
                 )),
           ),
           Container(
-            margin:const EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             width: double.maxFinite,
-            height: MediaQuery.sizeOf(context).height*0.3,
+            height: MediaQuery.sizeOf(context).height * 0.3,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(snap['postUrl']),
+                image: NetworkImage(widget.snap['postUrl']),
               ),
             ),
           ),
           Padding(
-            padding:const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             child: SizedBox(
               width: double.infinity,
               height: 30,
               child: Row(
                 children: [
                   LikeButton(
-                    snap: snap,
-                  ),  
-                 const SizedBox(
-                    width: 5,
+                    snap: widget.snap,
                   ),
                   Text(
-                    "${snap['likes'].length.toString()} likes",
-                    style:const TextStyle(color: kWhite),
+                    "  ${widget.snap['likes'].length.toString()} likes",
+                    style: const TextStyle(color: kWhite),
                   ),
-                 const SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   IconButton(
@@ -95,25 +104,27 @@ class PostCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CommentScreen(
-                            snap: snap,
+                            snap: widget.snap,
                           ),
                         ),
                       );
                     },
-                    icon:const Icon(Icons.comment_outlined),
-                    color: Colors.white,
-                  ),
-                 const SizedBox(
-                    width: 5,
+                    icon: const Icon(
+                      Icons.comment_outlined,
+                      weight: 100,
+                      grade: -25,
+                      size: 20,
+                    ),
+                    color: kWhite,
                   ),
                   Text(
                     "${commentLength.toString()} comments",
-                    style:const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: kWhite),
                   ),
-                 const Spacer(),
+                  const Spacer(),
                   Text(
-                    GetTimeAgo.parse(snap['datePublished'].toDate()),
-                    style:const TextStyle(color: Colors.white),
+                    GetTimeAgo.parse(widget.snap['datePublished'].toDate()),
+                    style: const TextStyle(color:kWhite),
                   ),
                 ],
               ),
@@ -124,12 +135,13 @@ class PostCard extends StatelessWidget {
             width: double.infinity,
             child: RichText(
               text: TextSpan(
-                style:const TextStyle(color: kWhite),
+                style: const TextStyle(color: kWhite),
                 children: [
                   TextSpan(
-                      text: "${snap['username']}  ",
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: snap['description'])
+                    text: "${widget.snap['username']}  ",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: widget.snap['description'])
                 ],
               ),
             ),

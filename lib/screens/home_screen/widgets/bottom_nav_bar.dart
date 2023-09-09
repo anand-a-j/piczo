@@ -28,7 +28,7 @@ class BottomNavBar extends StatelessWidget {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.add), label: "add post"),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite), label: "like"),
+                    icon: Icon(Icons.forum), label: "like"),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.person), label: "profile")
               ]);
