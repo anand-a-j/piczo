@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:piczo/providers/loading_provider.dart';
 import 'package:piczo/resources/auth_methods.dart';
 import 'package:piczo/screens/login_screen/login_screen.dart';
-import 'package:piczo/screens/login_screen/widgets/signup_button_title.dart';
 import 'package:piczo/screens/signup_screen/widgets/sign_up_titles.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';

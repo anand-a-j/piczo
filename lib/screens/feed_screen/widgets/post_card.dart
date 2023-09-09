@@ -13,7 +13,7 @@ import 'package:piczo/utils/utils.dart';
 class PostCard extends StatelessWidget {
   final dynamic snap;
   PostCard({super.key, required this.snap});
- int commentLength = 0;
+  int commentLength = 0;
   void getComments() async {
     try {
       QuerySnapshot snaps = await FirebaseFirestore.instance
@@ -48,7 +48,7 @@ class PostCard extends StatelessWidget {
             title: Text(
               snap['username'],
               style:
-                  const TextStyle(fontWeight: FontWeight.bold, color: kWhite),
+                  const TextStyle(fontWeight: FontWeight.bold, color: kWhite,fontSize: 16),
             ),
             trailing: IconButton(
                 onPressed: () => moreFunctions(context, snap),
@@ -78,21 +78,19 @@ class PostCard extends StatelessWidget {
                 children: [
                   LikeButton(
                     snap: snap,
-                  ),
-                 
+                  ),  
                  const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    snap['likes'].length.toString(),
-                    style: TextStyle(color: Colors.white),
+                    "${snap['likes'].length.toString()} likes",
+                    style:const TextStyle(color: kWhite),
                   ),
-                  SizedBox(
+                 const SizedBox(
                     width: 5,
                   ),
                   IconButton(
                     onPressed: () {
-                      print(snap);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -105,11 +103,11 @@ class PostCard extends StatelessWidget {
                     icon:const Icon(Icons.comment_outlined),
                     color: Colors.white,
                   ),
-                  SizedBox(
+                 const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    commentLength.toString(),
+                    "${commentLength.toString()} comments",
                     style:const TextStyle(color: Colors.white),
                   ),
                  const Spacer(),
