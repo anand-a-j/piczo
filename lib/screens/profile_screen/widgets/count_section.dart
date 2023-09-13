@@ -17,7 +17,7 @@ class CountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.sizeOf(context).height * 0.07,
+      height: MediaQuery.sizeOf(context).height * 0.08,
       width: double.infinity,
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.all(20),
