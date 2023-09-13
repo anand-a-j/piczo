@@ -8,7 +8,6 @@ import 'package:piczo/screens/settings_screen/widgets/custom_button_container.da
 import 'package:piczo/screens/settings_screen/widgets/user_title.dart';
 import 'package:piczo/utils/colors.dart';
 import 'package:piczo/utils/utils.dart';
-
 import 'widgets/privacy_policy.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -27,11 +26,14 @@ class SettingsScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.02,
+          ),
           UserNameTitle(
             username: username,
           ),
           SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.04,
+            height: MediaQuery.sizeOf(context).height * 0.06,
           ),
           ListView(
             shrinkWrap: true,
@@ -59,7 +61,9 @@ class SettingsScreen extends StatelessWidget {
                   onPressed: () {
                     signOut(context);
                   },
-                  title: "Log Out")
+                  title: "Log Out"),
+               
+              
             ],
           ),
         ],
