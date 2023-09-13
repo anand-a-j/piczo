@@ -148,7 +148,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             Expanded(
                               child: Container(
                                 width: double.infinity,
-                                height: 400,
+                                height: MediaQuery.sizeOf(context).height * 0.4,
                                 margin: const EdgeInsets.only(
                                     right: 10, top: 10, bottom: 10),
                                 padding: const EdgeInsets.all(10),
