@@ -120,16 +120,12 @@ class _PostCardState extends State<PostCard> {
                   Text(
                     "${commentLength.toString()} comments",
                     style: const TextStyle(color: kWhite),
-                  ),
-                  const Spacer(),
-                  Text(
-                    GetTimeAgo.parse(widget.snap['datePublished'].toDate()),
-                    style: const TextStyle(color:kWhite),
-                  ),
+                  ),                
                 ],
               ),
             ),
           ),
+          
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             width: double.infinity,
@@ -146,6 +142,20 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                GetTimeAgo.parse(widget.snap['datePublished'].toDate()),
+                style: const TextStyle(
+                    color: kGrey,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 10),
+              ),
+            ),
+          ),
+          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
         ],
       ),
     );
@@ -162,7 +172,6 @@ class _PostCardState extends State<PostCard> {
                 leading: const Icon(Icons.delete),
                 title: const Text("Delete Post"),
                 onTap: () async {
-                  print("delete post button clicked");
                   if (snap['uid'] == currentUser) {
                     String response =
                         await FirestoreMethods().deletePost(snap['postId']);

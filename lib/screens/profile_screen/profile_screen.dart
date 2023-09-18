@@ -145,11 +145,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       currentUserId == widget.uid
                                           ? const SizedBox.shrink()
                                           : Padding(
-                                            padding: const EdgeInsets.only(left: 15,right: 0,top: 0,bottom: 0),
-                                            child: CustomButton(
-                                                title: "Message",
-                                                onPressed: messageFunction),
-                                          )
+                                              padding: const EdgeInsets.only(
+                                                  left: 15,
+                                                  right: 0,
+                                                  top: 0,
+                                                  bottom: 0),
+                                              child: CustomButton(
+                                                  title: "Message",
+                                                  onPressed: messageFunction),
+                                            )
                                     ],
                                   ),
                                 ],
