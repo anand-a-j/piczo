@@ -19,6 +19,7 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   int commentLength = 0;
+  int likesLength = 0;
 
   void getComments() async {
     try {
@@ -35,6 +36,19 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+  int totalLikes() {
+    try {
+      final likes = widget.snap['likes'].length;
+      setState(() {
+        likesLength = likes;
+      });
+      return likesLength;
+    } catch (e) {
+      print("Something went wrong$e");
+      return likesLength;
+    }
+  }
+
   @override
   void initState() {
     getComments();
@@ -43,6 +57,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    totalLikes();
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -92,7 +107,7 @@ class _PostCardState extends State<PostCard> {
                     snap: widget.snap,
                   ),
                   Text(
-                    "  ${widget.snap['likes'].length.toString()} likes",
+                    "  $likesLength likes",
                     style: const TextStyle(color: kWhite),
                   ),
                   const SizedBox(
@@ -120,12 +135,11 @@ class _PostCardState extends State<PostCard> {
                   Text(
                     "${commentLength.toString()} comments",
                     style: const TextStyle(color: kWhite),
-                  ),                
+                  ),
                 ],
               ),
             ),
           ),
-          
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             width: double.infinity,
@@ -155,7 +169,9 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
           ),
-          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.01,
+          )
         ],
       ),
     );
